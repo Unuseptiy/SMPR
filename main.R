@@ -20,7 +20,6 @@ dist <- function(z, metricFunction = EM) {
 #Работа алгоритма 1нн
 z <- c(2.5, 0.7);
 distance <- dist(z,)
-#print()
 class <- iris[order(distance[,2])[1], 5]
 class;
 
