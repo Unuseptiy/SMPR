@@ -16,26 +16,18 @@ dist <- function(z, xl, metricFunction = EM) {
 oneNN <- function(z, xl) {
   distance <- dist(z, xl, )
   class <- iris[order(distance[,2])[1], 5] #сортируем массив расстояний и получаем класс классифицируемого объекта
-  
-  #отрисовка ирисов Фишера
-  colors <- c("setosa" = "red", "versicolor" = "green3", "virginica" = "blue")
-  plot(iris[,3:4], pch = 21, bg = colors[iris$Species],col = colors[iris$Species])
-  
-  #рисуем классифицируемый объект
-  points(z[1], z[2], pch = 22, bg = colors[class], asp = 1)
+  return(class) 
 }
-
-#Работа алгоритма 1нн
-z <- c(6.5, 2.5);
-xl <- iris[, 3:4]
-distance <- dist(z, xl, )
-class <- iris[order(distance[,2])[1], 5] #сортируем массив расстояний и получаем класс классифицируемого объекта
-class;
 
 #отрисовка ирисов Фишера
 colors <- c("setosa" = "red", "versicolor" = "green3", "virginica" = "blue")
 plot(iris[,3:4], pch = 21, bg = colors[iris$Species],col = colors[iris$Species])
 
-#рисуем классифицируемый объект
-points(z[1], z[2], pch = 22, bg = colors[class], asp = 1)
+for(i in 1:10){
+  z <- c(runif(1, 0, 2.5), runif(1, 0, 2.5))
+  oneNN(z, iris[,3:4])
+  #рисуем классифицируемый объект
+  points(z[1], z[2], pch = 22, bg = colors[class], asp = 1)
+}
+
 
