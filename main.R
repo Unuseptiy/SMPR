@@ -1,8 +1,3 @@
-# Title     : TODO
-# Objective : TODO
-# Created by: elenakozenko
-# Created on: 16.09.2020
-
 #функцция метрики
 EM <- function(u, v) {
   return(sqrt(sum((u - v) ^ 2)));
