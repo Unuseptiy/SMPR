@@ -6,7 +6,6 @@ EM <- function(u, v) {
 #функция, возвращающая отсортированный массив расстояний от классифицируемого объекта до элементов обучающей выборки
 ruler <- function(z, feature_matrix, metric_function = EM) {
   n <- dim(feature_matrix)[2]
-  print(n)
   distances <- matrix(NA, length(feature_matrix[,1]), 2)
   for(i in 1:length(feature_matrix[,1])) {
     distances[i,] <- c(i, metric_function(feature_matrix[i,1:n], z))
