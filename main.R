@@ -1,20 +1,24 @@
-#функцция метрики
+#евклидова метрика
 EM <- function(u, v) {
   return(sqrt(sum((u - v) ^ 2)));
 }
 
-#функция, возвращающая массив расстояний от классифицируемого объекта до элементов обучающей выборки
-dist <- function(z, xl, metricFunction = EM) {
-  distances <- matrix(NA, length(xl[,1]), 2)
-  for (i in 1:length(xl[,1])) {
-    distances[i,] <- c(i, metricFunction(xl[i,1:2], z))
+#функция, возвращающая отсортированный массив расстояний от классифицируемого объекта до элементов обучающей выборки
+ruler <- function(z, feature_matrix, metric_function = EM) {
+  n <- dim(feature_matrix)[2]
+  print(n)
+  distances <- matrix(NA, length(feature_matrix[,1]), 2)
+  for(i in 1:length(feature_matrix[,1])) {
+    distances[i,] <- c(i, metric_function(feature_matrix[i,1:n], z))
   }
+  distances <- distances[order(distances[,2]),]
   return(distances)
 }
 
-oneNN <- function(z, xl) {
-  distance <- dist(z, xl, )
-  class <- iris[order(distance[,2])[1], 5] #сортируем массив расстояний и получаем класс классифицируемого объекта
+#1nn алгоритм
+oneNN <- function(z, feature_matrix) {
+  distance <- ruler(z, feature_matrix, )
+  class <- iris[distance[1,1], 5] #сортируем массив расстояний и получаем класс классифицируемого объекта
   return(class)
 }
 
