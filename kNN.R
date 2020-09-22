@@ -14,8 +14,6 @@ ruler <- function(z, feature_matrix, metric_function = EM) {
   return(distances)
 }
 
-#ruler(c(2.0, 0.9), iris[,3:4])
-
 #принимает на вход обучающую выборку(features, labels), классифицируемый объект(z),
 #возвращает класс (class), к которому алго относит классифицируемый объект,
 # и k - количество соседей
@@ -28,31 +26,17 @@ kNN <- function(feature_matrix, labels, z, k) {
     class <- labels[distances[i,1]]
     cnt[class] <- cnt[class] + 1
   }
-  #print(distances[150,1])
-  #print(labels[distances[150, 1]])
 return(which.max(cnt))
 }
-
-#z <- c(4, 0.9)
-#class <- kNN(iris[,3:4], iris[,5], z, 6)
-#
-##iris[1,5]
-#if (as.integer(class) == as.integer(iris[1,5])) {
-#  print(":)")
-#} else {
-#  print(":(")
-#}
-
 
 # LOO на вход передаем алгоритм, крание значения настраиваемого
 # параметра, на выходе настроенный параметр, если флаг отрисовки графика
 # установлен, то рисуем график, отображающий зависимость величины ошибки
 # от значений настраиваемого параметра
-
 kNN_LOO <- function(algorithm = kNN, feature_matrix, labels, parametr_min_value, parametr_max_value, shedule_flag = FALSE){
   l <- dim(feature_matrix)[1]
   n <- dim(feature_matrix)[2]
-  loo <- rep(0, 150)
+  loo <- rep(0, 149)
   for(i in 1:l){
     if (i == 1) {
       tmp_feature_matrix <- feature_matrix[2:l,]
@@ -72,48 +56,12 @@ kNN_LOO <- function(algorithm = kNN, feature_matrix, labels, parametr_min_value,
     }
   }
   if (shedule_flag) {
-    plot(parametr_min_value:parametr_max_value, loo[parametr_min_value:parametr_max_value], pch=20)
+    plot(parametr_min_value:parametr_max_value, loo[parametr_min_value:parametr_max_value], xlab="k", ylab="loo", pch=20)
     lines(parametr_min_value:parametr_max_value, loo[parametr_min_value:parametr_max_value])
   }
-  return(loo)
+  print(loo)
+  write.table(loo, "loo_for_4.txt")
+  return(which.min(loo))
 }
 
-#tmp <- rep(0, 10)
-#tmp
-
-kNN_LOO(,iris[,3:4], iris[,5], 1, 149, TRUE)
-
-##отрисовка ирисов Фишера
-#colors <- c("1" = "red", "2" = "green3", "3" = "blue")
-#plot(iris[,3:4], pch = 21, bg = colors[iris$Species],col = colors[iris$Species])
-#
-##k <-
-#k <- 8
-##задание 10 рандомных классифицируемых объектов и их отрисовка
-#for(i in 1:10){
-#  z <- c(runif(1, 0, 7), runif(1, 0, 2.5))
-#  #рисуем классифицируемый объект
-#  points(z[1], z[2], pch = 22, bg = colors[kNN(iris[,3:4], iris[,5], z, k)], asp = 1)
-#}
-
-
-#str(iris[,5])
-
-#suma <- function(a, b) {
-#  return(a + b)
-#}
-#optima <- function(algo) {
-#  prev_value <- -1000
-#  for(i in 1:10) {
-#    tmp_param <- i
-#    value <- algo(1, tmp_param)
-#    if(value > prev_value) {
-#      prev_value <- value
-#      param <- tmp_param
-#    }
-#  }
-#  return(param)
-#}
-#
-#optima(suma)
-
+kNN_LOO(,iris[,1:4], iris[,5], 1, 149, TRUE)
