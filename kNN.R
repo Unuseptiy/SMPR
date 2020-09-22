@@ -65,3 +65,4 @@ kNN_LOO <- function(algorithm = kNN, feature_matrix, labels, parametr_min_value,
 }
 
 kNN_LOO(,iris[,1:4], iris[,5], 1, 149, TRUE)
+ 
