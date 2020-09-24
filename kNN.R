@@ -29,6 +29,30 @@ kNN <- function(feature_matrix, labels, z, k) {
 return(which.max(cnt))
 }
 
+#функция, выбрасывающая один элемент из матрицы признаков
+throw_features <- function(feature_matrix, i, l) {
+  if (i == 1) {
+      out_feature_matrix <- feature_matrix[2:l,]
+  } else if (i == l) {
+      out_feature_matrix <- feature_matrix[1:(l - 1),]
+  } else {
+      out_feature_matrix <- rbind(feature_matrix[1:(i - 1),], feature_matrix[(i + 1):l,])
+  }
+  return(out_feature_matrix)
+}
+
+#функция, выбрасывающая один элемент из множества меток класса
+throw_labels <- function(labels, i, l) {
+  if (i == 1) {
+      out_labels <- labels[2:l]
+  } else if (i == l) {
+      out_labels <- labels[1:(l - 1)]
+  } else {
+      out_labels <- c(labels[1:(i - 1)], labels[(i  + 1):l])
+  }
+  return(out_labels)
+}
+
 # LOO на вход передаем алгоритм, крание значения настраиваемого
 # параметра, на выходе настроенный параметр, если флаг отрисовки графика
 # установлен, то рисуем график, отображающий зависимость величины ошибки
@@ -36,21 +60,18 @@ return(which.max(cnt))
 kNN_LOO <- function(algorithm = kNN, feature_matrix, labels, parametr_min_value, parametr_max_value, shedule_flag = FALSE){
   l <- dim(feature_matrix)[1]
   n <- dim(feature_matrix)[2]
-  loo <- rep(0, 149)
-  for(i in 1:l){
-    if (i == 1) {
-      tmp_feature_matrix <- feature_matrix[2:l,]
-      tmp_labels <- labels[2:l]
-    } else if (i == l) {
-      tmp_feature_matrix <- feature_matrix[1:(l - 1),]
-      tmp_labels <- labels[1:(l - 1)]
-    } else {
-      tmp_feature_matrix <- rbind(feature_matrix[1:(i - 1),], feature_matrix[(i + 1):l,])
-      tmp_labels <- c(labels[1:(i - 1)], labels[(i  + 1):l])
-    }
+  loo <- rep(0, parametr_max_value)
+  #loo[1] <- 1000000
+  for(i in 1:l) {
+    tmp_feature_matrix <- throw_features(feature_matrix, i, l)
+    tmp_labels <- throw_labels(labels, i, l)
+    distances <- ruler(feature_matrix[i,1:n], tmp_feature_matrix)
+    cnt <- c("setosa" = 0, "versicolor" = 0, "virginica" = 0)
     for(tmp_parametr in parametr_min_value:parametr_max_value){
-      class <- algorithm(tmp_feature_matrix, tmp_labels, feature_matrix[i,1:n], tmp_parametr)
-      if (as.integer(class) != as.integer(labels[i])) {
+    #class <- algorithm(tmp_feature_matrix, tmp_labels, feature_matrix[i,1:n], tmp_parametr)
+        class <- tmp_labels[distances[tmp_parametr,1]]
+        cnt[class] <- cnt[class] + 1
+      if (as.integer(which.max(cnt)) != as.integer(labels[i])) {
         loo[tmp_parametr] <- loo[tmp_parametr] + 1
       }
     }
@@ -60,9 +81,24 @@ kNN_LOO <- function(algorithm = kNN, feature_matrix, labels, parametr_min_value,
     lines(parametr_min_value:parametr_max_value, loo[parametr_min_value:parametr_max_value])
   }
   print(loo)
-  write.table(loo, "loo_for_4.txt")
   return(which.min(loo))
 }
 
-kNN_LOO(,iris[,1:4], iris[,5], 1, 149, TRUE)
- 
+z <- c(iris[1,1:2] - 1, iris[1,3:4] + 1)
+#iris[1,1:4]
+ruler(z, iris[,1:4])
+
+#kNN_LOO(,iris[,1:4], iris[,5], 1, 149, TRUE)
+
+##отрисовка ирисов Фишера
+#colors <- c("1" = "red", "2" = "green3", "3" = "blue")
+#plot(iris[,3:4], pch = 21, bg = colors[iris$Species],col = colors[iris$Species])
+#
+##k <- kNN_LOO(,iris[,3:4], iris[,5], 1, 15, TRUE)
+#k <- 8
+##задание 10 рандомных классифицируемых объектов и их отрисовка
+#for(i in 1:10){
+#  z <- c(runif(1, 0, 7), runif(1, 0, 2.5))
+#  #рисуем классифицируемый объект
+#  points(z[1], z[2], pch = 22, bg = colors[kNN(iris[,3:4], iris[,5], z, k)], asp = 1)
+#}
