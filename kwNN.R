@@ -15,53 +15,6 @@ ruler <- function(z, feature_matrix, metric_function = EM) {
   return(distances)
 }
 
-
-#принимает на вход обучающую выборку(features, labels), классифицируемый объект(z),
-#возвращает класс (class), к которому алго относит классифицируемый объект,
-# и k - количество соседей
-#upd: фьючеры и лэйблы лучше передавать вместе, чтобы они сразу сортанулись или нет:)))
-kNN <- function(feature_matrix, labels, z, k) {
-  distances <- ruler(z, feature_matrix)
-  cnt <- c("setosa" = 0, "versicolor" = 0, "virginica" = 0)
-
-  for (i in 1:k) {
-    class <- labels[distances[i,1]]
-    cnt[class] <- cnt[class] + 1
-  }
-return(which.max(cnt))
-}
-
-
-# LOO на вход передаем алгоритм, крание значения настраиваемого
-# параметра, на выходе настроенный параметр, если флаг отрисовки графика
-# установлен, то рисуем график, отображающий зависимость величины ошибки
-# от значений настраиваемого параметра
-kNN_LOO <- function(feature_matrix, labels, parametr_min_value, parametr_max_value, shedule_flag = FALSE){
-  l <- dim(feature_matrix)[1]
-  n <- dim(feature_matrix)[2]
-  loo <- rep(0, parametr_max_value)
-  for(i in 1:l) {
-    tmp_feature_matrix <- feature_matrix[-i, ]
-    tmp_labels <- labels[-i]
-    distances <- ruler(feature_matrix[i,1:n], tmp_feature_matrix)
-    cnt <- c("setosa" = 0, "versicolor" = 0, "virginica" = 0)
-    for(tmp_parametr in parametr_min_value:parametr_max_value){
-    #class <- algorithm(tmp_feature_matrix, tmp_labels, feature_matrix[i,1:n], tmp_parametr)
-        class <- tmp_labels[distances[tmp_parametr,1]]
-        cnt[class] <- cnt[class] + 1
-      if (as.integer(which.max(cnt)) != as.integer(labels[i])) {
-        loo[tmp_parametr] <- loo[tmp_parametr] + 1
-      }
-    }
-  }
-  if (shedule_flag) {
-    #plot(parametr_min_value:parametr_max_value, loo[parametr_min_value:parametr_max_value], xlab = "k", ylab = "loo", pch = 20)
-    #lines(parametr_min_value:parametr_max_value, loo[parametr_min_value:parametr_max_value])
-    plot(parametr_min_value:parametr_max_value, loo[parametr_min_value:parametr_max_value], xlab = "k", ylab = "loo", type = "l")
-  }
-  return(which.min(loo))
-}
-
 kwNN <- function(feature_matrix, labels, z, k, q) {
   distances <- ruler(z, feature_matrix)
   cnt <- c("setosa" = 0, "versicolor" = 0, "virginica" = 0)
@@ -110,6 +63,3 @@ kwNN_LOO <- function(feature_matrix, labels, k, parametr_min_value, parametr_max
   print(loo)
   return(which.min(loo[,2]))
 }
-
-kwNN_LOO(iris[,3:4], iris[,5], 6, 0, 1, TRUE)
-
