@@ -82,4 +82,4 @@
 ![](kwNN_plot.png)
 
 Карта классификации ирисов Фишера алгоритмом kNN, при k = 6:
-![](classification_map_for_knn_FisherIris.png)
+![](classification_map_for_knn_FisherIrises.png)
