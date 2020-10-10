@@ -31,22 +31,43 @@ kNN <- function(feature_matrix, labels, z, k) {
 return(which.max(cnt))
 }
 
-deltaX <- 0.25
+colors <- c("setosa" = "red", "versicolor" = "green3", "virginica" = "blue")
+plot(iris[,3:4], pch = 21, bg = colors[iris$Species],col = colors[iris$Species], xlab = "Petal.Length", ylab = "Petal.Width", main = "Карта классификации ирисов Фишера алгоритмом kNN, при k = 6")
+
+#x <- max(iris$Petal.Length)
+#y <- max(iris$Petal.Width)
+#points(x, y, bg = colors[class], col = colors[class])
+
+
+deltaX <- 0.1
 deltaY <- 0.1
 coords <- matrix(0, 0, 3)
 index <- 1
 x <- min(iris$Petal.Length)
 y <- min(iris$Petal.Width)
-#tmp <- matrix(0, 1, 3)
 while (x <= max(iris$Petal.Length)) {
-  y <- y <- min(iris$Petal.Width)
+  if (x == max(iris$Petal.Length)) print("+")
+  y <- min(iris$Petal.Width)
   while (y <= max(iris$Petal.Width)) {
-    #tmp <- c(x, y, kNN(iris[, 3:4], iris[, 5], c(x, y), 6))
-    coords <- rbind(coords, c(x, y, as.integer(kNN(iris[, 3:4], iris[, 5], c(x, y), 6))))
+      class <- kNN(iris[, 3:4], iris[, 5], c(x, y), 6)
+      points(x, y, bg = colors[class], col = colors[class])
     y <- y + deltaY
   }
   x <- x + deltaX
 }
-#coords
-colors <- c("setosa" = "red", "versicolor" = "green3", "virginica" = "blue")
-plot(coords, pch = 21, bg = colors[coords[,3]], col = colors[coords[,3]], xlab = "Petal.Length", ylab = "Petal.Width")
+
+x <- max(iris$Petal.Length)
+y <- min(iris$Petal.Width)
+while (y <= max(iris$Petal.Width)) {
+  class <- kNN(iris[, 3:4], iris[, 5], c(x, y), 6)
+  points(x, y, bg = colors[class], col = colors[class])
+  y <- y + deltaY
+}
+
+x <- min(iris$Petal.Lengt)
+y <- max(iris$Petal.Width)
+while (x <= max(iris$Petal.Length)) {
+  class <- kNN(iris[, 3:4], iris[, 5], c(x, y), 6)
+  points(x, y, bg = colors[class], col = colors[class])
+  x <- x + deltaX
+}
