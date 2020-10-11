@@ -23,11 +23,11 @@ oneNN <- function(z, feature_matrix) {
 
 #отрисовка ирисов Фишера
 colors <- c("setosa" = "red", "versicolor" = "green3", "virginica" = "blue")
-plot(iris[,3:4], pch = 21, bg = colors[iris$Species],col = colors[iris$Species])
+plot(iris[,3:4], pch = 21, bg = colors[iris$Species],col = colors[iris$Species], main = "1nn-классификация 10 рандомных объектов")
 
 #задание 10 рандомных классифицируемых объектов и их отрисовка
 for(i in 1:10){
-  z <- c(runif(1, 0, 7), runif(1, 0, 2.5))
+  z <- c(runif(1, min(iris$Petal.Length), max(iris$Petal.Length)), runif(1, min(iris$Petal.Width), max(iris$Petal.Width)))
   #рисуем классифицируемый объект
   points(z[1], z[2], pch = 22, bg = colors[oneNN(z, iris[,3:4])], asp = 2)
 }
