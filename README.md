@@ -167,7 +167,7 @@
 - квартическое ядро:
 ![](parzen_CM_quar.png)
 - прямоугольное ядро:
-![](parzen_CM_rect.png) ![](parzen_CM_tria.png)
+![](parzen_CM_rect.png)
 - треугольное ядро:
 ![](parzen_CM_tria.png)
 
