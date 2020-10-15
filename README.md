@@ -144,7 +144,7 @@
 - ядро Епанечникова:
 ![](parzen_loo_epanechnikov.png)
 - гауссовское ядро:
-![](parzen_loo_gausю.png)
+![](parzen_loo_gaus.png)
 - квартическое ядро:
 ![](parzen_loo_quar.png)
 - прямоугольное ядро:
