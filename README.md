@@ -105,13 +105,13 @@
 Функция ***kwNN_LOO*** аналогична функции ***kNN_LOO*** из файла *kNN.R*.
 
 Тепловая карта зависимости ошибки от k и q:
-![](kwNN_loo_plot.png)
+![](kwNN_heatMap.png)
 
 Пример работы программы - классификация 10 рандомных точек:
 ![](kwNN__plot.png)
 
 Карта классификации ирисов Фишера алгоритмом kNN, при k = 6:
-![](classification_map_for_knn_FisherIrises.png)
+![](classification_map_for_knn_FisherIris.png)
 
 ### parzen.R
 
