@@ -37,19 +37,19 @@ kNN <- function(feature_matrix, labels, z, k) {
 return(which.max(cnt))
 }
 
-x <- vector()
-y <- vector()
-x[1] <- 1
-x[2] <- 1
-x[3] <- 4
-x[4] <- 5
-x[5] <- 4
+a <- vector()
+b <- vector()
+a[1] <- 1
+a[2] <- 1
+a[3] <- 4
+a[4] <- 5
+a[5] <- 4
 
-y[1] <- 1
-y[2] <- 3
-y[3] <- 1
-y[4] <- 2
-y[5] <- 3
+b[1] <- 1
+b[2] <- 3
+b[3] <- 1
+b[4] <- 2
+b[5] <- 3
 
 class <- vector()
 class[1] <- "a"
@@ -58,13 +58,15 @@ class[3] <- "b"
 class[4] <- "b"
 class[5] <- "b"
 
-feature_matrix <- cbind(x, y)
-feature_matrix
+feature_matrix <- cbind(a, b)
+#feature_matrix
 
 colors <- c("a" = "red", "b" = "blue")
-plot(x, y, pch = 21, col = colors[class], bg = colors[class], cex = 3)
+plot(a, b, pch = 21, col = colors[class], bg = colors[class], cex = 3, main = "Пример kNN-классифифкации ")
 
-z <- c(1, 2)
-cl1 <- kNN(feature_matrix, class, z, 5)
-cl2 <- kwNN(feature_matrix, class, z, 5, 0.6)
-points(z, pch = 22, col = colors[cl2], bg = colors[cl2])
+#z <- c(2, 2)
+x <- 2
+y <- 2
+cl1 <- kNN(feature_matrix, class, c(x, y), 5)
+cl2 <- kwNN(feature_matrix, class, c(x, y), 5, 0.6)
+points(x, y, pch = 22, col = colors[cl2], bg = colors[cl1], cex = 3)
