@@ -56,8 +56,6 @@ kwNN_LOO <- function(feature_matrix, labels, k, parametr_min_value, parametr_max
     }
   }
   if (shedule_flag) {
-    #plot(parametr_min_value:parametr_max_value, loo[parametr_min_value:parametr_max_value], xlab<-"k", ylab<-"loo", pch<-20)
-    #lines(parametr_min_value:parametr_max_value, loo[parametr_min_value:parametr_max_value])
     plot(loo[,1], loo[,2], xlab = "q", ylab = "loo", type = "l")
   }
   print(loo)
