@@ -19,22 +19,23 @@
 |Parzen         |h = 0.4             |6     |
 |Potential      |h = 0.4,            |6     |
 
-<div class="row">
- <div class="col">
-  <img src="kNN_CM.png" width="250" heigth="200">
- <div>
- <div class="col">
-  <img src="kwNN_CM.png" width="250" heigth="200">
- <div>
-<div>
-<div class="row">
+<table>
+ <tr>
+  <td>
+   <img src="kNN_CM.png" width="250" heigth="200">
+  </td>
+  <td>
+   <img src="kwNN_CM.png" width="250" heigth="200">
+  </td>
+</tr>
+
  <div class="col">
   <img src="parzen_CM_epan.png">
  <div>
  <div class="col">
   <img src="poten_CM_full.png">
  <div>
-<div>
+</table>
 
 ## Лабораторная №1
 
