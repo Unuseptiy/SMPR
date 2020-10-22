@@ -19,6 +19,23 @@
 |Parzen         |h = 0.4             |6     |
 |Potential      |h = 0.4,            |6     |
 
+<div class="row">
+ <div class="col">
+  <img src="kNN_CM.png">
+ <div>
+ <div class="col">
+  <img src="kwNN_CM.png">
+ <div>
+<div>
+<div class="row">
+ <div class="col">
+  <img src="parzen_CM_epan.png">
+ <div>
+ <div class="col">
+  <img src="poten_CM_full.png">
+ <div>
+<div>
+
 ## Лабораторная №1
 
 ### oneNN.R
@@ -125,7 +142,7 @@
 Пример работы программы - классификация 10 рандомных точек:
 ![](kwNN__plot.png)
 
-Карта классификации ирисов Фишера алгоритмом kNN, при k = 3, q = 0.6:
+Карта классификации ирисов Фишера алгоритмом kwNN, при k = 3, q = 0.6:
 ![](kwNN_CM.png)
 
 Пример, показывающий преимущество метода kwNN над kNN:
