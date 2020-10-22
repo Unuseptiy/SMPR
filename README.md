@@ -22,19 +22,19 @@
 <table>
  <tr>
   <td>
-   <img src="kNN_CM.png" width="400" heigth="200">
+   <img src="kNN_CM.png" width="500" heigth="200">
   </td>
   <td>
-   <img src="kwNN_CM.png" width="400" heigth="200">
+   <img src="kwNN_CM.png" width="500" heigth="200">
   </td>
 </tr>
 
  <tr>
   <td>
-   <img src="parzen_CM_epan.png" width="400" heigth="200">
+   <img src="parzen_CM_epan.png" width="500" heigth="200">
   </td>
   <td>
-   <img src="poten_CM_full.png" width="400" heigth="200">
+   <img src="poten_CM_full.png" width="500" heigth="200">
   </td>
  </tr>
 </table>
