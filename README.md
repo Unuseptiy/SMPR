@@ -21,7 +21,7 @@
 
 <div class="row">
  <div class="col">
-  <img src="kNN_CM.png">
+  <img src="kNN_CM.png" width="50" heigth="25">
  <div>
  <div class="col">
   <img src="kwNN_CM.png">
