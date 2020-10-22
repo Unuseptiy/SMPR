@@ -22,19 +22,21 @@
 <table>
  <tr>
   <td>
-   <img src="kNN_CM.png" width="375" heigth="200">
+   <img src="kNN_CM.png" width="400" heigth="200">
   </td>
   <td>
-   <img src="kwNN_CM.png" width="375" heigth="200">
+   <img src="kwNN_CM.png" width="400" heigth="200">
   </td>
 </tr>
 
- <div class="col">
-  <img src="parzen_CM_epan.png">
- <div>
- <div class="col">
-  <img src="poten_CM_full.png">
- <div>
+ <tr>
+  <td>
+   <img src="parzen_CM_epan.png" width="400" heigth="200">
+  </td>
+  <td>
+   <img src="poten_CM_full.png" width="400" heigth="200">
+  </td>
+ </tr>
 </table>
 
 ## Лабораторная №1
