@@ -21,10 +21,10 @@
 
 <div class="row">
  <div class="col">
-  <img src="kNN_CM.png" width="50" heigth="25">
+  <img src="kNN_CM.png" width="250" heigth="200">
  <div>
  <div class="col">
-  <img src="kwNN_CM.png">
+  <img src="kwNN_CM.png" width="250" heigth="200">
  <div>
 <div>
 <div class="row">
