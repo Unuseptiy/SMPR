@@ -34,7 +34,7 @@
    <img src="parzen/parzen_CM_epan.png" width="500" heigth="200">
   </td>
   <td>
-   <img src="poten_CM_full.png" width="500" heigth="200">
+   <img src="poten/poten_CM_full.png" width="500" heigth="200">
   </td>
  </tr>
 </table>
@@ -236,13 +236,13 @@
 Выход: вектор потенциалов.
 
 Карта выборки с учетом потенциалов объектов:
-![](poten_raspr.png)
+![](poten/poten_raspr.png)
 
 Карта классификации:
 - с учетом потенциалов:
-![](poten_CM.png)
+![](poten/poten_CM.png)
 - без:
-![](poten_CM_full.png)
+![](poten/poten_CM_full.png)
 
 ## Лабораторная №4
 
