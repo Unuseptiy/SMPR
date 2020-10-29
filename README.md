@@ -22,10 +22,10 @@
 <table>
  <tr>
   <td>
-   <img src="kNN_CM.png" width="500" heigth="200">
+   <img src="kNN/kNN_CM.png" width="500" heigth="200">
   </td>
   <td>
-   <img src="kwNN_CM.png" width="500" heigth="200">
+   <img src="kwNN/kwNN_CM.png" width="500" heigth="200">
   </td>
 </tr>
 
