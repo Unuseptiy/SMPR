@@ -31,7 +31,7 @@
 
  <tr>
   <td>
-   <img src="parzen_CM_epan.png" width="500" heigth="200">
+   <img src="parzen/parzen_CM_epan.png" width="500" heigth="200">
   </td>
   <td>
    <img src="poten_CM_full.png" width="500" heigth="200">
@@ -157,7 +157,7 @@
 
 ## Лабораторная №2
 
-### parzen.R
+### parzen/parzen.R
 *Метод парзеновского окна.*
 
 В алгоритме k взвешенных ближайших соседей вес голосу соседа присваивается
@@ -187,27 +187,27 @@
 
 Далее приведены графики loo-функций для разных ядер:
 - ядро Епанечникова:
-![](parzen_loo_epanechnikov.png)
+![](parzen/parzen_loo_epanechnikov.png)
 - гауссовское ядро:
-![](parzen_loo_gaus.png)
+![](parzen/parzen_loo_gaus.png)
 - квартическое ядро:
-![](parzen_loo_quar.png)
+![](parzen/parzen_loo_quar.png)
 - прямоугольное ядро:
-![](parzen_loo_rect.png)
+![](parzen/parzen_loo_rect.png)
 - треугольное ядро:
-![](parzen_loo_tria.png)
+![](parzen/parzen_loo_tria.png)
 
 Карты классификации для разных ядер:
 - ядро Епанечникова:
-![](parzen_CM_epan.png)
+![](parzen/parzen_CM_epan.png)
 - гауссовское ядро:
-![](parzen_CM_gaus.png)
+![](parzen/parzen_CM_gaus.png)
 - квартическое ядро:
-![](parzen_CM_quar.png)
+![](parzen/parzen_CM_quar.png)
 - прямоугольное ядро:
-![](parzen_CM_rect.png)
+![](parzen/parzen_CM_rect.png)
 - треугольное ядро:
-![](parzen_CM_tria.png)
+![](parzen/parzen_CM_tria.png)
 
 ## Лабораторная №3
 
