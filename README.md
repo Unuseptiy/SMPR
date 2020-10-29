@@ -150,10 +150,10 @@
 
 Пример, показывающий преимущество метода kwNN над kNN:
 - kNN-классификация объекта:
-![](compare_kNN.png)
+![](compare/compare_kNN.png)
 
 - kwNN-классификация объекта:
-![](compare_kwNN.png)
+![](compare/compare_kwNN.png)
 
 ## Лабораторная №2
 
