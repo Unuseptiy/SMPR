@@ -328,7 +328,7 @@ STOLP-алгоритм. Он, изначально посчитав отступ
 
 ## Лабораторная №5
 
-### level_curves.R
+### level_curves/level_curves.R
 
 *Линии уровня*
 
@@ -352,19 +352,19 @@ n-мерного нормального распределения (которо
 Графики линий уровня нормального распределения с разными матрицами ковариации
 и одинаковым матожиданием (М = (3, 3)):
 - некорелированные признаки, одинаковые дисперсии:
-![](level_nekor_sameDisp.png)
+![](level_curves/level_nekor_sameDisp.png)
 
 - некорелированные признаки, разные дисперсии:
 <table>
 	<tr>
 		<td>
-			<img src="level_nekor_nsameDisp1.png" width="500" heigth="200">
+			<img src="level_curves/level_nekor_nsameDisp1.png" width="500" heigth="200">
 		</td>
 		<td>
-			<img src="level_nekor_nsameDisp2.png" width="500" heigth="200">
+			<img src="level_curves/level_nekor_nsameDisp2.png" width="500" heigth="200">
 		</td>
 	</tr>
 </table>
 
 - корелированные признаки, разные дисперсии:
-![](level_kor_nsameDisp.png)
+![](level_curves/level_kor_nsameDisp.png)
