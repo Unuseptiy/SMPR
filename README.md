@@ -320,6 +320,120 @@ STOLP-алгоритм. Он, изначально посчитав отступ
 Функция ***STOLP*** реализует алгоритм STOLP. Вход: матрица признаков, вектор
 классов, значение допустимой ошибки. Выход: множество эталонов.
 
+Листинг:
+```R
+#считает все отступы множества для классификации относительно обучающего множества
+margin <- function(feature_matrix, labels, classification_set, classification_set_labels) {
+  l <- dim(classification_set)[1]
+  #матрица, содержащая координаты, класс и отступ элемента
+  M <- matrix(0, 0, 4)
+  for (i in 1:l) {
+    z <- classification_set[i,]
+    cnt <- parzen(feature_matrix, labels, z, 0.4, epan)
+    w1 <- cnt[classification_set_labels[i]]
+    cnt[classification_set_labels[i]] <- 0
+    w2 <- cnt[which.max(cnt)]
+    m <- w1 - w2
+    M <- rbind(M, c(classification_set[i,1], classification_set[i,2], as.integer(classification_set_labels[i]), m))
+  }
+  M <- M[order(M[,4]),]
+  return(M)
+}
+
+#считает все отступ для каждого айриса относительно всего множества без выбранного элемента
+err <- function (feature_matrix, labels) {
+  l <- dim(feature_matrix)[1]
+  M <- matrix(0,0,4)
+  for (i in 1:l) {
+    tmp_feature_matrix <- feature_matrix[-i]
+    tmp_labels <- labels[-i]
+    cnt <- parzen(tmp_feature_matrix, tmp_labels, feature_matrix[i,], 0.4, epan)
+    w1 <- cnt[labels[i]]
+    cnt[labels[i]] <- 0
+    w2 <- cnt[which.max(cnt)]
+    m <- w1 - w2
+    M <- rbind(M, c(feature_matrix[i,1], feature_matrix[i,2], as.integer(labels[i]), m))
+  }
+  M <- M[order(M[,4]),]
+  return(M)
+}
+
+#алгоритм STOLP
+STOLP <- function (feature_matrix, labels, l0) {
+  #подсчет отступов на всех айрисах 
+  #M <- err(feature_matrix, labels)
+  ############################################################################
+  #загрузка отсупов всех айрисов из файла
+  M <- read.csv("margin_STOLP_tmp.txt")
+  l <- dim(M)[1]
+  n <- dim(M)[2]
+  tmp <- matrix(0, l, (n - 1))
+  for (i in 1:l){
+    tmp[i,] <- c(M[i, 2], M[i, 3], M[i, 4], M[i, 5])
+  }
+  M <- tmp
+  ############################################################################
+  #удаление из выборки шумов и ошибок
+  i <- 1
+  while (M[i, 4] <= 0) {
+    M <- M[-i,]
+  }
+
+  l <- dim(M)[1]
+  omega <- matrix(0,0,3)
+  index <- vector()
+  for (i in 1:3) {
+    index[i] <- 0
+  }
+  #добавляем в множество эталонов Ω по одному эталонному объекту из каждого класса
+  for (i in l:1) {
+    if (M[i, 3] == 1 & index[1] == 0) {
+      omega <- rbind(omega, M[i, 1:3])
+      index[1] <- i
+    }
+    if (M[i, 3] == 2 & index[2] == 0) {
+      omega <- rbind(omega, M[i, 1:3])
+      index[2] <- i
+    }
+    if (M[i, 3] == 3 & index[3] == 0) {
+      omega <- rbind(omega, M[i, 1:3])
+      index[3] <- i
+    }
+    if (index[1] != 0 & index[2] != 0 & index[3] != 0) {
+      break
+    }
+  }
+  #удаляем из выборки добавленные в Ω эталоны
+  index <- index[order(index)]
+  for (i in 3:1) {
+    M <- M[-index[i],]
+  }
+  l <- dim(M)[1]
+
+  # тут надо бы добавить проверку множеств Ω и X на совпадение
+  
+  #добавление новых элементов  в Ω до достижения нужного качества классификации на эталонах
+  erro <- l #количество эл-тов, на которых ошиблись
+  while (erro > l0) {
+    erro <- 0
+    i <- 1
+    #отступы элементов исходной выборки относительно Ω
+    tmpM <- margin(omega[,1:2], omega[,3], M[,1:2], M[,3])
+    while(tmpM[i, 4] <= 0) {
+      erro <- erro + 1
+      i <- i + 1
+    }
+    #добавление элемента с наименьшим отступом
+    omega <- rbind(omega, tmpM[1,1:3])
+    #удаление этого элемента из исходной выборки
+    M <- tmpM[-1,]
+  }
+  #print(omega)
+  return(omega)
+}
+omega <- STOLP(iris[,3:4], iris[,5], 10)
+```
+
 Множество эталонов ирисов Фишера для алгоритма парзеновского окна с
 ядром Епанечникова, шириной окнв - 0.4:
 ![](STOLP/STOLP__etalon.png)
@@ -353,45 +467,44 @@ n-мерного нормального распределения (которо
 и одинаковым матожиданием (М = (3, 3)):
 - некорелированные признаки, одинаковые дисперсии:
 <table>
-	<tr>
-		<td>
-			<img src="level_curves/level_nekor_sameDisp.png" width="500" heigth="200">
-		</td>
-		<td>
-			<img src="level_curves/level_nekor_sameDisp_fill.png" width="500" heigth="200">
-		</td>
-	</tr>
+  <tr>
+    <td>
+      <img src="level_curves/level_nekor_sameDisp.png" width="500" heigth="200">
+    </td>
+    <td>
+      <img src="level_curves/level_nekor_sameDisp_fill.png" width="500" heigth="200">
+    </td>
+  </tr>
 </table>
-
 
 - некорелированные признаки, разные дисперсии:
 <table>
-	<tr>
-		<td>
-			<img src="level_curves/level_nekor_nsameDisp1.png" width="500" heigth="200">
-		</td>
-		<td>
-			<img src="level_curves/level_nekor_nsameDisp2.png" width="500" heigth="200">
-		</td>
-	</tr>
-	<tr>
-		<td>
-			<img src="level_curves/level_nekor_nsameDisp1_fill.png" width="500" heigth="200">
-		</td>
-		<td>
-			<img src="level_curves/level_nekor_nsameDisp2_fill.png" width="500" heigth="200">
-		</td>
-	</tr>
+  <tr>
+    <td>
+      <img src="level_curves/level_nekor_nsameDisp1.png" width="500" heigth="200">
+    </td>
+    <td>
+      <img src="level_curves/level_nekor_nsameDisp2.png" width="500" heigth="200">
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <img src="level_curves/level_nekor_nsameDisp1_fill.png" width="500" heigth="200">
+    </td>
+    <td>
+      <img src="level_curves/level_nekor_nsameDisp2_fill.png" width="500" heigth="200">
+    </td>
+  </tr>
 </table>
 
 - корелированные признаки, разные дисперсии:
 <table>
-	<tr>
-		<td>
-			<img src="level_curves/level_kor_nsameDisp.png" width="500" heigth="200">
-		</td>
-		<td>
-			<img src="level_curves/level_kor_nsameDisp_fill.png" width="500" heigth="200">
-		</td>
-	</tr>
+  <tr>
+    <td>
+      <img src="level_curves/level_kor_nsameDisp.png" width="500" heigth="200">
+    </td>
+    <td>
+      <img src="level_curves/level_kor_nsameDisp_fill.png" width="500" heigth="200">
+    </td>
+  </tr>
 </table>
