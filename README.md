@@ -352,7 +352,17 @@ n-мерного нормального распределения (которо
 Графики линий уровня нормального распределения с разными матрицами ковариации
 и одинаковым матожиданием (М = (3, 3)):
 - некорелированные признаки, одинаковые дисперсии:
-![](level_curves/level_nekor_sameDisp.png)
+<table>
+	<tr>
+		<td>
+			<img src="level_curves/level_nekor_sameDisp.png" width="500" heigth="200">
+		</td>
+		<td>
+			<img src="level_curves/level_nekor_sameDisp_fill.png" width="500" heigth="200">
+		</td>
+	</tr>
+</table>
+
 
 - некорелированные признаки, разные дисперсии:
 <table>
@@ -364,7 +374,24 @@ n-мерного нормального распределения (которо
 			<img src="level_curves/level_nekor_nsameDisp2.png" width="500" heigth="200">
 		</td>
 	</tr>
+	<tr>
+		<td>
+			<img src="level_curves/level_nekor_nsameDisp1_fill.png" width="500" heigth="200">
+		</td>
+		<td>
+			<img src="level_curves/level_nekor_nsameDisp2_fill.png" width="500" heigth="200">
+		</td>
+	</tr>
 </table>
 
 - корелированные признаки, разные дисперсии:
-![](level_curves/level_kor_nsameDisp.png)
+<table>
+	<tr>
+		<td>
+			<img src="level_curves/level_kor_nsameDisp.png" width="500" heigth="200">
+		</td>
+		<td>
+			<img src="level_curves/level_kor_nsameDisp_fill.png" width="500" heigth="200">
+		</td>
+	</tr>
+</table>
