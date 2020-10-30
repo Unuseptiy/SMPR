@@ -340,7 +340,7 @@ margin <- function(feature_matrix, labels, classification_set, classification_se
   return(M)
 }
 
-#считает все отступ для каждого айриса относительно всего множества без выбранного элемента
+#считает отступ для каждого айриса относительно всего множества без выбранного элемента
 err <- function (feature_matrix, labels) {
   l <- dim(feature_matrix)[1]
   M <- matrix(0,0,4)
@@ -484,12 +484,12 @@ n-мерного нормального распределения (которо
       <img src="level_curves/level_nekor_nsameDisp1.png" width="500" heigth="200">
     </td>
     <td>
-      <img src="level_curves/level_nekor_nsameDisp2.png" width="500" heigth="200">
+      <img src="level_curves/level_nekor_nsameDisp1_fill.png" width="500" heigth="200">
     </td>
   </tr>
   <tr>
     <td>
-      <img src="level_curves/level_nekor_nsameDisp1_fill.png" width="500" heigth="200">
+      <img src="level_curves/level_nekor_nsameDisp2.png" width="500" heigth="200">
     </td>
     <td>
       <img src="level_curves/level_nekor_nsameDisp2_fill.png" width="500" heigth="200">
