@@ -94,7 +94,7 @@
 обучающая выборка - ирисы Фишера.
 
 <!--![](kNN/oneNN__plot.png)-->
-<img src="kNN/oneNN__plot.png" width="700" height="280">
+<img src="kNN/oneNN__plot.png" width="700" height="500">
 
 #### Метод k ближайших соседей
 [Оглавление](#Оглавление)
@@ -131,13 +131,16 @@
 оптимальное значение параметра.
 
 График зависимости ошибки от k:
-![](kNN/kNN__loo_plot.png)
+<!--![](kNN/kNN__loo_plot.png)-->
+<img src="kNN/kNN__loo_plot.png" width="700" height="500">
 
 Пример работы программы - классификация 10 рандомных точек:
-![](kNN/kNN__plot.png)
+<!--![](kNN/kNN__plot.png)-->
+<img src="kNN/kNN__plot.png" width="700" height="500">
 
 Карта классификации ирисов Фишера алгоритмом kNN, при k = 6:
-![](kNN/kNN_CM.png)
+<!--![](kNN/kNN_CM.png)-->
+<img src="kNN/kNN_CM.png" width="700" height="500">
 
 #### Метод k взвешенных ближайших соседей.
 [Оглавление](#Оглавление)
@@ -167,20 +170,25 @@
 Функция ***kwNN_LOO*** аналогична функции ***kNN_LOO*** из файла *kNN.R*.
 
 Тепловая карта зависимости ошибки от k и q:
-![](kwNN/kwNN_heatMap.png)
+<!-- ![](kwNN/kwNN_heatMap.png) -->
+<img src="kwNN/kwNN_heatMap.png" width="700" height="500">
 
 Пример работы программы - классификация 10 рандомных точек:
-![](kwNN/kwNN__plot.png)
+<!-- ![](kwNN/kwNN__plot.png) -->
+<img src="kwNN/kwNN__plot.png" width="700" height="500">
 
 Карта классификации ирисов Фишера алгоритмом kwNN, при k = 3, q = 0.6:
-![](kwNN/kwNN_CM.png)
+<!-- ![](kwNN/kwNN_CM.png) -->
+<img src="kwNN/kwNN_CM.png" width="700" height="500">
 
 Пример, показывающий преимущество метода kwNN над kNN:
 - kNN-классификация объекта:
-![](compare/compare_kNN.png)
+<!-- ![](compare/compare_kNN.png) -->
+<img src="compare/compare_kNN.png" width="700" height="500">
 
 - kwNN-классификация объекта:
-![](compare/compare_kwNN.png)
+<!-- ![](compare/compare_kwNN.png) -->
+<img src="compare/compare_kwNN.png" width="700" height="500">
 
 ### Метод парзеновского окна
 [Оглавление](#Оглавление)
@@ -214,27 +222,37 @@
 
 Далее приведены графики loo-функций для разных ядер:
 - ядро Епанечникова:
-![](parzen/parzen_loo_epanechnikov.png)
+<!-- ![](parzen/parzen_loo_epanechnikov.png) -->
+<img src="parzen/parzen_loo_epanechnikov.png" width="700" height="500">
 - гауссовское ядро:
-![](parzen/parzen_loo_gaus.png)
+<!-- ![](parzen/parzen_loo_gaus.png) -->
+<img src="parzen/parzen_loo_gaus.png" width="700" height="500">
 - квартическое ядро:
-![](parzen/parzen_loo_quar.png)
+<!-- ![](parzen/parzen_loo_quar.png) -->
+<img src="parzen/parzen_loo_quar.png" width="700" height="500">
 - прямоугольное ядро:
-![](parzen/parzen_loo_rect.png)
+<!-- ![](parzen/parzen_loo_rect.png) -->
+<img src="parzen/parzen_loo_rect.png" width="700" height="500">
 - треугольное ядро:
-![](parzen/parzen_loo_tria.png)
+<!-- ![](parzen/parzen_loo_tria.png) -->
+<img src="parzen/parzen_loo_tria.png" width="700" height="500">
 
 Карты классификации для разных ядер:
 - ядро Епанечникова:
-![](parzen/parzen_CM_epan.png)
+<!-- ![](parzen/parzen_CM_epan.png) -->
+<img src="parzen/parzen_CM_epan.png" width="700" height="500">
 - гауссовское ядро:
-![](parzen/parzen_CM_gaus.png)
+<!-- ![](parzen/parzen_CM_gaus.png) -->
+<img src="parzen/parzen_CM_gaus.png" width="700" height="500">
 - квартическое ядро:
-![](parzen/parzen_CM_quar.png)
+<!-- ![](parzen/parzen_CM_quar.png) -->
+<img src="parzen/parzen_CM_quar.png" width="700" height="500">
 - прямоугольное ядро:
-![](parzen/parzen_CM_rect.png)
+<!-- ![](parzen/parzen_CM_rect.png) -->
+<img src="parzen/parzen_CM_rect.png" width="700" height="500">
 - треугольное ядро:
-![](parzen/parzen_CM_tria.png)
+<!-- ![](parzen/parzen_CM_tria.png) -->
+<img src="parzen/parzen_CM_tria.png" width="700" height="500">
 
 ### Метод потенциальных функций.
 [Оглавление](#Оглавление)
@@ -263,13 +281,16 @@
 Выход: вектор потенциалов.
 
 Карта выборки с учетом потенциалов объектов:
-![](poten/poten_raspr.png)
+<!-- ![](poten/poten_raspr.png) -->
+<img src="poten/poten_raspr.png" width="700" height="500">
 
 Карта классификации:
 - с учетом потенциалов:
-![](poten/poten_CM.png)
+<!-- ![](poten/poten_CM.png) -->
+<img src="poten/poten_CM.png" width="700" height="500">
 - без:
-![](poten/poten_CM_full.png)
+<!-- ![](poten/poten_CM_full.png) -->
+<img src="poten/poten_CM_full.png" width="700" height="500">
 
 ### Отбор эталонных объектов
 [Оглавление](#Оглавление)
@@ -302,7 +323,8 @@
 классов.
 
 График отступов ирисов Фишера:
-![](margin/margin__plot_parzen.png)
+<!-- ![](margin/margin__plot_parzen.png) -->
+<img src="margin/margin__plot_parzen.png" width="700" height="500">
 
 *Алгоритм крутого склона*
 
@@ -464,8 +486,9 @@ omega <- STOLP(iris[,3:4], iris[,5], 10)
 ```
 
 Множество эталонов ирисов Фишера для алгоритма парзеновского окна с
-ядром Епанечникова, шириной окнв - 0.4:
-![](STOLP/STOLP__etalon.png)
+ядром Епанечникова, шириной окна - 0.4:
+<!-- ![](STOLP/STOLP__etalon.png) -->
+<img src="STOLP/STOLP__etalon.png" width="700" height="500">
 
 ## Байесовские алгоритмы классификации
 
