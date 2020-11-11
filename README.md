@@ -94,7 +94,8 @@ EM <- function(u, v) {
 возрастанию массив расстояний.
 
 ```R
-#функция, возвращающая отсортированный массив расстояний от классифицируемого объекта до элементов обучающей выборки
+#функция, возвращающая отсортированный массив расстояний от классифицируемого
+#объекта до элементов обучающей выборки
 ruler <- function(z, feature_matrix, metric_function = EM) {
   n <- dim(feature_matrix)[2]
   distances <- matrix(NA, length(feature_matrix[,1]), 2)
@@ -113,7 +114,8 @@ ruler <- function(z, feature_matrix, metric_function = EM) {
 #1nn алгоритм
 oneNN <- function(z, feature_matrix) {
   distance <- ruler(z, feature_matrix, )
-  class <- iris[distance[1,1], 5] #сортируем массив расстояний и получаем класс классифицируемого объекта
+  #сортируем массив расстояний и получаем класс классифицируемого объекта
+  class <- iris[distance[1,1], 5] 
   return(class)
 }
 ```
