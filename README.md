@@ -81,13 +81,42 @@
 Функция ***EM*** - функция метрики, принимает на вход два вектора, отдает на
 выход расстояние между векторами. Выбрана евклидова метрика.
 
+```R
+#евклидова метрика
+EM <- function(u, v) {
+  return(sqrt(sum((u - v) ^ 2)));
+}
+```
+
 Функция ***ruler*** измеряет расстояния от классифицируемого объекта до
 элементов обучающей выборки. Принимает на вход классифицируемый объект, матрицу
 векторов обучающей выборки и функцию метрики, отдает отсортированный по
 возрастанию массив расстояний.
 
+```R
+#функция, возвращающая отсортированный массив расстояний от классифицируемого объекта до элементов обучающей выборки
+ruler <- function(z, feature_matrix, metric_function = EM) {
+  n <- dim(feature_matrix)[2]
+  distances <- matrix(NA, length(feature_matrix[,1]), 2)
+  for(i in 1:length(feature_matrix[,1])) {
+    distances[i,] <- c(i, metric_function(feature_matrix[i,1:n], z))
+  }
+  distances <- distances[order(distances[,2]),]
+  return(distances)
+}
+```
+
 Функция ***oneNN*** реализует алгоритм 1nn. Принимает на вход классифицируемый
 объект и матрицу признаков, отдает предполагаемый класс.
+
+```R
+#1nn алгоритм
+oneNN <- function(z, feature_matrix) {
+  distance <- ruler(z, feature_matrix, )
+  class <- iris[distance[1,1], 5] #сортируем массив расстояний и получаем класс классифицируемого объекта
+  return(class)
+}
+```
 
 Далее приводится пример работы программы с отрисовкой графика: классифицируется
 10 объектов,
@@ -126,9 +155,44 @@
 признаков, массив меток, классифицируемый объект и количество k соседей.
 Возвращает предполагаемый класс.
 
+```R
+kNN <- function(feature_matrix, labels, z, k) {
+  distances <- ruler(z, feature_matrix)
+  cnt <- c("setosa" = 0, "versicolor" = 0, "virginica" = 0)
+
+  for (i in 1:k) {
+    class <- labels[distances[i,1]]
+    cnt[class] <- cnt[class] + 1
+  }
+return(which.max(cnt))
+}
+```
+
 Функция ***kNN_LOO*** принимает на вход матрицу признаков, метки, минимальное и
 максимальное значение подбираемого параметра, флаг отрисовки графика. На выходе:
 оптимальное значение параметра.
+
+```R
+kNN_LOO <- function(feature_matrix, labels, parametr_min_value, parametr_max_value){
+  l <- dim(feature_matrix)[1]
+  n <- dim(feature_matrix)[2]
+  loo <- rep(0, parametr_max_value)
+  for(i in 1:l) {
+    tmp_feature_matrix <- feature_matrix[-i, ]
+    tmp_labels <- labels[-i]
+    distances <- ruler(feature_matrix[i,1:n], tmp_feature_matrix)
+    cnt <- c("setosa" = 0, "versicolor" = 0, "virginica" = 0)
+    for(tmp_parametr in parametr_min_value:parametr_max_value){
+        class <- tmp_labels[distances[tmp_parametr,1]]
+        cnt[class] <- cnt[class] + 1
+      if (as.integer(which.max(cnt)) != as.integer(labels[i])) {
+        loo[tmp_parametr] <- loo[tmp_parametr] + 1
+      }
+    }
+  }
+  return(which.min(loo))
+}
+```
 
 График зависимости ошибки от k:
 <!--![](kNN/kNN__loo_plot.png)-->
