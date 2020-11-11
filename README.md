@@ -906,9 +906,10 @@ NNBC <- function(z, feature_matrix, labels, class_quan, lambda){
 <table>
   <tr>
     <td>
-     &#955;_1 = 1<br>
+<!--     &#955;_1 = 1<br>
      &#955;_2 = 1<br>
-     &#955;_3 = 1<br>
+     &#955;_3 = 1<br>-->
+      <img src="NNBC/lambda_111.png">
     </td>
     <td>
       <img src="NNBC/NNBC_classmap_111.png">
@@ -917,9 +918,10 @@ NNBC <- function(z, feature_matrix, labels, class_quan, lambda){
 
   <tr>
     <td>
-     &#955;_1 = 10<br>
+<!--     &#955;_1 = 10<br>
      &#955;_2 = 1<br>
-     &#955;_3 = 1<br>
+     &#955;_3 = 1<br>-->
+      <img src="NNBC/lambda_1011.png">
     </td>
     <td>
       <img src="NNBC/NNBC_classmap_1011.png">
@@ -928,9 +930,10 @@ NNBC <- function(z, feature_matrix, labels, class_quan, lambda){
 
   <tr>
     <td>
-     &#955;_1 = 1<br>
+<!--     &#955;_1 = 1<br>
      &#955;_2 = 10<br>
-     &#955;_3 = 1<br>
+     &#955;_3 = 1<br>-->
+     <img src="NNBC/lambda_1101.png">
     </td>
     <td>
       <img src="NNBC/NNBC_classmap_1101.png">
@@ -939,9 +942,10 @@ NNBC <- function(z, feature_matrix, labels, class_quan, lambda){
 
   <tr>
     <td>
-     &#955;_1 = 1<br>
+<!--     &#955;_1 = 1<br>
      &#955;_2 = 1<br>
-     &#955;_3 = 10<br>
+     &#955;_3 = 10<br>-->
+     <img src="NNBC/lambda_1110.png">
     </td>
     <td>
       <img src="NNBC/NNBC_classmap_1110.png">
