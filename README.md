@@ -94,8 +94,7 @@ EM <- function(u, v) {
 возрастанию массив расстояний.
 
 ```R
-#функция, возвращающая отсортированный массив расстояний от классифицируемого
-#объекта до элементов обучающей выборки
+#функция, возвращающая отсортированный массив расстояний от классифицируемого объекта до элементов обучающей выборки
 ruler <- function(z, feature_matrix, metric_function = EM) {
   n <- dim(feature_matrix)[2]
   distances <- matrix(NA, length(feature_matrix[,1]), 2)
@@ -159,7 +158,9 @@ oneNN <- function(z, feature_matrix) {
 
 ```R
 kNN <- function(feature_matrix, labels, z, k) {
+  # массив хранящий расстояния до всех элементов выборки
   distances <- ruler(z, feature_matrix)
+  # массив, хранящий количества элементов каждого класса среди ближайших k соседей
   cnt <- c("setosa" = 0, "versicolor" = 0, "virginica" = 0)
 
   for (i in 1:k) {
@@ -180,10 +181,13 @@ kNN_LOO <- function(feature_matrix, labels, parametr_min_value, parametr_max_val
   n <- dim(feature_matrix)[2]
   loo <- rep(0, parametr_max_value)
   for(i in 1:l) {
+    # выкидываем один элемент из обучающей выборки
     tmp_feature_matrix <- feature_matrix[-i, ]
     tmp_labels <- labels[-i]
+    # измеряем расстояния от выкинутого элемента до остальных элементов обучающей выборки
     distances <- ruler(feature_matrix[i,1:n], tmp_feature_matrix)
     cnt <- c("setosa" = 0, "versicolor" = 0, "virginica" = 0)
+    # проверяем на  ошибку для разных значений k
     for(tmp_parametr in parametr_min_value:parametr_max_value){
         class <- tmp_labels[distances[tmp_parametr,1]]
         cnt[class] <- cnt[class] + 1
@@ -232,6 +236,21 @@ kNN_LOO <- function(feature_matrix, labels, parametr_min_value, parametr_max_val
 знаменатель q геометрической прогрессии (в виде весовой функции выбрана
 геометрическая прогрессия со знаменателем из интервала (0, 1). Возвращает
 предполагаемый класс.
+
+```R
+kwNN <- function(feature_matrix, labels, z, k, q) {
+  # массив хранящий расстояния до всех элементов выборки
+  distances <- ruler(z, feature_matrix)
+  # массив, хранящий количества элементов каждого класса среди ближайших k соседей
+  cnt <- c("setosa" = 0, "versicolor" = 0, "virginica" = 0)
+
+  for (i in 1:k) {
+    class <- labels[distances[i,1]]
+    cnt[class] <- cnt[class] + q ^ i
+  }
+return(which.max(cnt))
+}
+```
 
 Функция ***kwNN_LOO*** аналогична функции ***kNN_LOO*** из файла *kNN.R*.
 
@@ -282,9 +301,58 @@ kNN_LOO <- function(feature_matrix, labels, parametr_min_value, parametr_max_val
 вектор меток, классифицируемый объект, ширина окна h, функция ядра.
 Выход: класс.
 
+```R
+parzen <- function (feature_matrix, labels, z, h, core) {
+  l <- dim(feature_matrix)[1]
+  n <- dim(feature_matrix)[2]
+  cnt <- c("setosa" = 0, "versicolor" = 0, "virginica" = 0)
+  for (i in 1:l) {
+    cnt[labels[i]] <- cnt[labels[i]] + core(EM(feature_matrix[i,1:n], z) / h)
+  }
+  if(cnt["setosa"] != 0 | cnt["versicolor"] != 0 | cnt["virginica"] != 0){
+    return(which.max(cnt))
+  }
+}
+```
+
 Функция ***parzen_LOO*** подбирает оптимальный параметр h ширины окна.
 Вход: матрица признаков, вектор меток, минимальное и максимальное значение
 параметра, ядро и флаг отрисовки графика. Выход: оптимальное значение h.
+
+```R
+parzen_LOO <- function(feature_matrix, labels, parametr_min_value, parametr_max_value, core) {
+  l <- dim(feature_matrix)[1]
+  # шаг изменения значения параметра
+  delta <- 0.1
+  rows <- (parametr_max_value - parametr_min_value) / delta + 1
+  loo <- matrix(0, ceiling(rows), 2)
+  h <- parametr_min_value
+  for (index in 1:rows) {
+    loo[index, 1] <- h
+    h <- h + delta
+  }
+
+  for (i in 1:l) {
+    tmp_feature_matrix <- feature_matrix[-i,]
+    tmp_labels <- labels[-i]
+    h <- parametr_min_value
+    distances <- ruler(feature_matrix[i,], tmp_feature_matrix)
+    for (index in 1:rows) {
+      cnt <- c("setosa" = 0, "versicolor" = 0, "virginca" = 0)
+      j <- 1
+      while(distances[j,2] <= h) {
+        cnt[tmp_labels[distances[j,1]]] <- cnt[tmp_labels[distances[j,1]]] + core(distances[j, 2] / h)
+        j <- j + 1
+      }
+      if (as.integer(which.max(cnt)) != as.integer(labels[i])){
+            loo[index, 2] <- loo[index, 2] + 1
+        }
+      h <- h + delta
+    }
+  }
+  return(loo[which.min(loo[,2]), 1])
+}
+```
 
 Далее приведены графики loo-функций для разных ядер:
 - ядро Епанечникова:
@@ -342,9 +410,57 @@ kNN_LOO <- function(feature_matrix, labels, parametr_min_value, parametr_max_val
 вектор меток, классифицируемый объект, функция ядра, вектор ширин окон h и
 вектор потенциалов gamma. Выход: класс.
 
+```R
+poten <- function(feature_matrix, labels, z, core, h, gamma) {
+  l <- dim(feature_matrix)[1]
+  cnt <- c("setosa" = 0, "versicolor" = 0, "virginica" = 0)
+  for (i in 1:l) {
+    distance <- EM(z, feature_matrix[i,])
+    if (distance <= h[i]) {
+      cnt[labels[i]] <- cnt[labels[i]] + gamma[i] * core(distance / h[i])
+    }
+  }
+  if(cnt["setosa"] != 0 | cnt["versicolor"] != 0 | cnt["virginica"] != 0) {
+    return(which.max(cnt))
+  } else {
+    return(0)
+  }
+}
+```
+
 Функция ***gamma_set*** подбирает значения потенциалов gamma. 
 Вход: матрица признаков, вектор меток и допустимое значние ошибок.
 Выход: вектор потенциалов.
+
+```R
+gamma_set <- function(feature_matrix, labels, core, eps) {
+  l <- dim(feature_matrix)[1]
+  gamma <- rep(0, l)
+  h <- rep(0.4, l)
+  loo <- eps + 1
+  # счетчик количества шагов алгоритма, при котором не улучшается ошибка
+  cnt <- 0
+  # значение ошибки на предыдущем проходе алгоритма
+  prev_loo <- eps + 1
+  while(loo >= eps & cnt < 5) {
+    loo <- 0
+    # цикл, считающий ошибку на данных параметрах и изменяющий гамма
+    for (i in 1:l){
+      pot <- poten(feature_matrix[-i,], labels[-i], feature_matrix[i,], core, h, gamma)
+      if (as.integer(pot) != as.integer(labels[i])) {
+        gamma[i] <- gamma[i] + 1
+        loo <- loo + 1
+      }
+    }
+    if (loo < prev_loo) {
+      prev_loo <- loo
+    } else {
+      cnt <- cnt + 1
+    }
+  }
+  return (gamma)
+}
+```
 
 Карта выборки с учетом потенциалов объектов:
 <!-- ![](poten/poten_raspr.png) -->
@@ -384,6 +500,17 @@ kNN_LOO <- function(feature_matrix, labels, parametr_min_value, parametr_max_val
 элемент, для которого считается отступ, номер этого элемента в списке
 ирисов Фишера. Выход: посчитанный отступ.
 
+```R
+margin <- function(feature_matrix, labels, z, index) {
+  cnt <- parzen(feature_matrix, labels, z, 0.4, epan)
+  w1 <- cnt[iris[index, 5]]
+  cnt[iris[index, 5]] <- 0
+  w2 <- cnt[which.max(cnt)]
+  M <- w1 - w2
+  return(M)
+}
+```
+
 Функция ***margin_plot*** считает отступы для всех элементов обучающей выборки,
 сортирует их по возрастанию и отрисовывает. Вход: матрица признаков и вектор
 классов.
@@ -403,6 +530,26 @@ kNN_LOO <- function(feature_matrix, labels, parametr_min_value, parametr_max_val
 
 Функция ***cool_descent*** реализует алгоритм крутого склона. Вход: массив
 отступов. Выход: массив отступов без шумов.
+
+```R
+cool_descent <- function(M) {
+  i <- 2
+  prev_dif <- 0
+  index <- 1
+  while(M[i] <= 0) {
+    dif <- M[i] - M[i - 1]
+    if (dif > prev_dif) {
+      prev_dif <- dif
+      index <- i
+    }
+    i <- i + 1
+  }
+  for (i in 1:(index - 1)) {
+    M <- M[-i]
+  }
+  return(M)
+}
+```
 
 #### Алгоритм STOLP
 [Оглавление](#Оглавление)
@@ -430,14 +577,6 @@ STOLP-алгоритм. Он, изначально посчитав отступ
 считаются отступы. Выход: матрица, в столбцах который: значения признаков,
 класс, отступ объектов, для которых считали отступ.
 
-Функция ***err*** считает отступы объектов обучающей выборки.
-Вход: матрица признаков, вектор классов. Выход аналогичен выходу функции
-***margin***.
-
-Функция ***STOLP*** реализует алгоритм STOLP. Вход: матрица признаков, вектор
-классов, значение допустимой ошибки. Выход: множество эталонов.
-
-Листинг:
 ```R
 #считает все отступы множества для классификации относительно обучающего множества
 margin <- function(feature_matrix, labels, classification_set, classification_set_labels) {
@@ -456,7 +595,13 @@ margin <- function(feature_matrix, labels, classification_set, classification_se
   M <- M[order(M[,4]),]
   return(M)
 }
+```
 
+Функция ***err*** считает отступы объектов обучающей выборки.
+Вход: матрица признаков, вектор классов. Выход аналогичен выходу функции
+***margin***.
+
+```R
 #считает отступ для каждого айриса относительно всего множества без выбранного элемента
 err <- function (feature_matrix, labels) {
   l <- dim(feature_matrix)[1]
@@ -475,6 +620,12 @@ err <- function (feature_matrix, labels) {
   return(M)
 }
 
+```
+
+Функция ***STOLP*** реализует алгоритм STOLP. Вход: матрица признаков, вектор
+классов, значение допустимой ошибки. Выход: множество эталонов.
+
+```R
 #алгоритм STOLP
 STOLP <- function (feature_matrix, labels, l0) {
   #подсчет отступов на всех айрисах 
@@ -548,7 +699,6 @@ STOLP <- function (feature_matrix, labels, l0) {
   #print(omega)
   return(omega)
 }
-omega <- STOLP(iris[,3:4], iris[,5], 10)
 ```
 
 Множество эталонов ирисов Фишера для алгоритма парзеновского окна с
@@ -576,6 +726,15 @@ n-мерного нормального распределения (которо
 Функция ***density*** считает значение плотности распределения с определенными
 матожиданием и матрицей ковариации в точке. Вход: координаты точки, матождание
 и матрица ковариации. Выход: значение плотности в точке.
+
+```R
+#Считает плотность нормального многомерного распределения с матожиданием М и матрицей ковариации Sigma
+density <- function(x, M, Sigma) {
+  first <- sqrt((2  * pi) ^ dim(Sigma)[1] * det(Sigma)) ^ (-1)
+  second <- exp(t(x - M) %*% ginv(Sigma) %*% (x - M) / -2)
+  return(first * second)
+}
+```
 
 Функция ***plotin*** отрисовывает линии уровня плотности распределения.
 Вход: матожидание и матрица ковариации.
@@ -655,18 +814,6 @@ n-мерного нормального распределения (которо
 Функция ***mat_expect*** считает матожидание случайной величины. Вход: элементы
 одного класса, их вероятности. Выход: матожидание класса.
 
-Функция ***dispersion*** считает дисперсию случайной величины. Вход: элементы
-одного класса, их вероятности. Выход: дисперсия класса.
-
-Функция ***NNBC*** реализует алгоритм ННБК. Вход: классифицируемый объект,
-обучающая выборка, вектор меток класса, количество классов, вектор потерь.
-Выход: предполагаемый класс.
-
-Функция ***norm_dencity*** считает плотность заданного нормального
-распределения в точке. Вход: точка, матожидание, дисперсия. Выход: плотность.
-
-Листинг:
-
 ```R
 #мат ожидание случайного вектора
 mat_expect <- function(feature_matrix, probability) {
@@ -678,7 +825,12 @@ mat_expect <- function(feature_matrix, probability) {
   }
   return(sum)
 }
+```
 
+Функция ***dispersion*** считает дисперсию случайной величины. Вход: элементы
+одного класса, их вероятности. Выход: дисперсия класса.
+
+```R
 dispersion <- function(feature_matrix, probability) {
   l <- dim(feature_matrix)[1]
   n <- dim(feature_matrix)[2]
@@ -689,13 +841,24 @@ dispersion <- function(feature_matrix, probability) {
   }
   return(mat_expect(for_ME, probability))
 }
+```
 
-norm_dencity <- function(ksi, mu, sigma) {
+Функция ***norm_density*** считает плотность заданного нормального
+распределения в точке. Вход: точка, матожидание, дисперсия. Выход: плотность.
+
+```R
+norm_density <- function(ksi, mu, sigma) {
   first <- 1 / (sigma * sqrt(2 * pi))
   second <- exp(-((ksi - mu) ^ 2) / (2 * sigma ^ 2))
   return(first * second)
 }
+```
 
+Функция ***NNBC*** реализует алгоритм ННБК. Вход: классифицируемый объект,
+обучающая выборка, вектор меток класса, количество классов, вектор потерь.
+Выход: предполагаемый класс.
+
+```R
 #алгоритм ННБК
 NNBC <- function(z, feature_matrix, labels, class_quan, lambda){
   l <- dim(feature_matrix)[1]
