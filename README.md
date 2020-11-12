@@ -1027,3 +1027,57 @@ OBC <- function (z, feature_matrix, labels, class_quan, lambda) {
 Карта классификации ирисов Фишера plug-in алгоритмом:
 <img src="plug-in/plug-in_CM.png" width="700" height="500">
 
+### Линейный дискриминант Фишера
+[Оглавление](#Оглавление)
+
+*FLD/FLD.R*
+
+В алгоритме линейного дискриминаната Фишера предполагается, что ковариационные
+матрицы классов равны, откуда вытекает: оптимальный байесовский классификитор
+принимает вид максимизации некоторой линейной функции.
+
+Функции ***mat_expect***, ***sigma_cnt***, ***density*** аналогичны
+соответствующим из *plug-in/plug-in.R*.
+
+Функция ***FLD*** реализует алгоритм линейного дискриминанта Фишера.
+Вход: классифицируемый объект, матрица признаков, вектор меток, количество
+классов, вектор потерь. Выход: предполагаемый класс.
+
+```R
+FLD <- function (z, feature_matrix, labels, class_quan, lambda) {
+  l <- dim(feature_matrix)[1]
+  n <- dim(feature_matrix)[2]
+  p <- rep(0, class_quan)
+  E <- matrix(0, 0, n)
+  for (i in 1:class_quan){
+    left <- (i - 1) * 50 + 1
+    right <- (i - 1) * 50 + 50
+    E <- rbind(E, mat_expect(feature_matrix[left:right,], rep(1/50, 50)))
+  }
+  for (i in 1:l) {
+    if (as.integer(labels[i]) == 1) {
+      p[1] <- p[1] + 1
+    }
+    if (as.integer(labels[i]) == 2) {
+      p[2] <- p[2] + 1
+    }
+    if (as.integer(labels[i]) == 3) {
+              p[3] <- p[3] + 1
+    }
+  }
+  p <- p / l
+
+  cnt <- c("setosa" =  0, "versicolor" = 0,  "virginca" = 0)
+  for (i in 1:class_quan) {
+    left <- 1
+    right <- 150
+    sigma <- sigma_cnt(feature_matrix[left:right, ],E[i, ], class_quan)
+    print(sigma)
+    cnt[i] <- lambda[i] * p[i] * density(z, E[i,], sigma)
+  }
+  return(which.max(cnt))
+}
+``` 
+
+Карта классификации ирисов Фишера алгоритмом линейного дискриминанта Фишера:
+<img src="FLD/FLD_CM.png" width="700" height="500">
