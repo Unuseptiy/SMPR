@@ -961,8 +961,69 @@ NNBC <- function(z, feature_matrix, labels, class_quan, lambda){
 *plug_in/plug_in.R*
 
 В данном алгоритме, в отличии от ННБК, не строится предположение о
-представимости функции правдоподоюия классов в виде покоординатного
+представимости функции правдоподобия классов в виде покоординатного
 произведения, а строится эмпирическая оценка ковариационной матрицы и функция
 правлоподобия классов представляется как плотность многомерного нормального
 распрделения.
+
+Функция ***mat_expect*** аналогична соответствующей из *NNBC/NNBC.R*.
+
+Функция ***sigma_cnt*** считает матрицу ковариации для опрделенного класса.
+Вход: матрица признаков и матожидание класса. Выход: матрица ковариации.
+
+```R
+sigma_cnt <- function(feature_matrix, mu) {
+  l <- dim(feature_matrix)[1]
+  n <- length(mu)
+  sum <- matrix(0, n, n)
+  for (i in 1:l) {
+    sum <- sum + (feature_matrix[i,] - mu) %*% t(feature_matrix[i, ] - mu)
+  }
+  sum <- sum / (l - 1)
+  return(sum)
+}
+```
+
+Функция ***density*** аналогична соответствующей из ***level_curves/level_curves.R***.
+
+Функция ***OBC*** реализует оптимальный байесовский классификатор.
+Вход: классифицируемый объект, матрица признаков, вектор меток, количество
+классов, вектор потерь. Выход: предполагаемый класс.
+
+```R
+OBC <- function (z, feature_matrix, labels, class_quan, lambda) {
+  l <- dim(feature_matrix)[1]
+  n <- dim(feature_matrix)[2]
+  p <- rep(0, class_quan)
+  E <- matrix(0, 0, n)
+  for (i in 1:class_quan){
+    left <- (i - 1) * 50 + 1
+    right <- (i - 1) * 50 + 50
+    E <- rbind(E, mat_expect(feature_matrix[left:right,], rep(1/50, 50)))
+  }
+  for (i in 1:l) {
+    if (as.integer(labels[i]) == 1) {
+      p[1] <- p[1] + 1
+    }
+    if (as.integer(labels[i]) == 2) {
+      p[2] <- p[2] + 1
+    }
+    if (as.integer(labels[i]) == 3) {
+              p[3] <- p[3] + 1
+    }
+  }
+  p <- p / l
+  cnt <- c("setosa" =  0, "versicolor" = 0,  "virginca" = 0)
+  for (i in 1:class_quan) {
+    left <- (i - 1) * 50 + 1
+    right <- (i - 1) * 50 + 50
+    sigma <- sigma_cnt(feature_matrix[left:right, ],E[i, ])
+    cnt[i] <- lambda[i] * p[i] * density(z, E[i,], sigma)
+  }
+  return(which.max(cnt))
+}
+```
+u
+Карта классификации ирисов Фишера plug-in алгоритмом:
+<img src="plug-in/plug-in_CM.png" width="700" height="500">
 
