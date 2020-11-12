@@ -1023,7 +1023,7 @@ OBC <- function (z, feature_matrix, labels, class_quan, lambda) {
   return(which.max(cnt))
 }
 ```
-u
+
 Карта классификации ирисов Фишера plug-in алгоритмом:
 <img src="plug-in/plug-in_CM.png" width="700" height="500">
 
