@@ -738,7 +738,8 @@ STOLP <- function (feature_matrix, labels, l0) {
 <img src="level_curves/matr.png" height="250">
 
 В итоге получаем формулу:
-<!--<img src="level_curves/form1.png" width="700" height="250">-->
+
+<img src="level_curves/form1_new.png" width="500" height="80">
 
 Расскрывая К, получим формулу линий уровня нормального распределения:
 
@@ -990,6 +991,10 @@ NNBC <- function(z, feature_matrix, labels, class_quan, lambda){
 произведения, а строится эмпирическая оценка ковариационной матрицы и функция
 правлоподобия классов представляется как плотность многомерного нормального
 распрделения.
+
+Можно выписать в аналитическом виде формулы разделяющих классы гиперплоскостей:
+
+<img src="plug-in/div.png" height="150">
 
 Функция ***mat_expect*** аналогична соответствующей из *NNBC/NNBC.R*.
 
