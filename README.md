@@ -1110,7 +1110,7 @@ FLD <- function (z, feature_matrix, labels, class_quan, lambda) {
 ``` 
 
 Карта классификации ирисов Фишера алгоритмом линейного дискриминанта Фишера:
-<img src="FLD/FLD_CM_new.png" width="700" height="500">
+<img src="FLD/FLD_cm.png" width="700" height="500">
 
 Пример работы алгоритма ADALINE...:
 <img src="ADALINE/ADALINE_ex.png" width="700" height="500">
