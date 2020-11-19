@@ -727,7 +727,7 @@ STOLP <- function (feature_matrix, labels, l0) {
 
 Определим K:
 
-<img src="level_curves/K.png" width="600" height="150">
+<img src="level_curves/K.png" width="400" height="150">
 
 Введем матрицу, обратную матрице ковариации сигма:
 
