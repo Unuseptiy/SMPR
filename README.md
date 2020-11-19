@@ -734,10 +734,10 @@ STOLP <- function (feature_matrix, labels, l0) {
 <img src="level_curves/sigma.png" width="200" height="100">
 
 Раскроем матричное произведение под экспонентой:
-<img src="level_curves/matr.png" width="700" height="250">
+<img src="level_curves/matr.png" height="250">
 
 В итоге получаем формулу:
-<img src="level_curves/form1.png" width="700" height="250">
+<!--<img src="level_curves/form1.png" width="700" height="250">-->
 
 Расскрывая К, получим формулу линий уровня нормального распределения:
 <img src="level_curves/form2.png" height="150">
