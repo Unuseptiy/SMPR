@@ -1062,60 +1062,39 @@ OBC <- function (z, feature_matrix, labels, class_quan, lambda) {
 <table>
   <tr>
     <td>
-<!--     &#955;_1 = 1<br>
-     &#955;_2 = 1<br>
-     &#955;_3 = 1<br>-->
-      <img src="NNBC/lambda_111.png">
+      &#955;(red) = 1<br>
+      &#955;(green) = 1<br>
+      &#955;(blue) = 1<br>
     </td>
     <td>
-      <img src="NNBC/NNBC_classmap_111.png">
-    </td>
-  </tr>
-
-  <tr>
-    <td>
-<!--     &#955;_1 = 10<br>
-     &#955;_2 = 1<br>
-     &#955;_3 = 1<br>-->
-<!--      <img src="NNBC/lambda_1011.png">-->
+      &#955;(red) = 1.2<br>
+      &#955;(green) = 1<br>
+      &#955;(blue) = 1<br>
     </td>
     <td>
-      <img src="plug-in_1.2111.png">
-    </td>
-  </tr>
-
-  <tr>
-    <td>
-<!--     &#955;_1 = 1<br>
-     &#955;_2 = 10<br>
-     &#955;_3 = 1<br>-->
-<!--     <img src="NNBC/lambda_1101.png">-->
+      &#955;(red) = 1<br>
+      &#955;(green) = 1.2<br>
+      &#955;(blue) = 1<br>
     </td>
     <td>
-      <img src="plug-in_11.211.png">
+      &#955;(red) = 1<br>
+      &#955;(green) = 1<br>
+      &#955;(blue) = 1.2<br>
     </td>
   </tr>
 
   <tr>
     <td>
-<!--     &#955;_1 = 1<br>
-     &#955;_2 = 1<br>
-     &#955;_3 = 10<br>-->
-<!--     <img src="NNBC/lambda_1110.png">-->
+      <img src="plug-in/plug-in_111.png">
     </td>
     <td>
-      <img src="plug-in_111.21.png">
-    </td>
-  </tr>
-  <tr>
-    <td>
-<!--     &#955;_1 = 1<br>
-     &#955;_2 = 1<br>
-     &#955;_3 = 10<br>-->
-<!--     <img src="NNBC/lambda_1110.png">-->
+      <img src="plug-in/plug-in_1.2111.png">
     </td>
     <td>
-      <img src="plug-in_1111.2.png">
+      <img src="plug-in/plug-in_11.21.png">
+    </td>
+    <td>
+      <img src="plug-in/plug-in_111.21.png">
     </td>
   </tr>
 </table>
