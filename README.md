@@ -1221,7 +1221,7 @@ SGD <- function (feature_matrix, labels, L, L1, eps) {
     index <- runif(1, 1, l) %/% 1
     epsilon <- L((w %*% feature_matrix[index,]) * labels[index])
     etha <- 1 / check
-    w <- w - as.double(etha) * L1(feature_matrix[index,], w)
+    w <- w - as.double(etha) * L1(feature_matrix[index,])
     new_Q <- (1 - lambda) * Q + lambda * epsilon
     if (new_Q >= Q - 1 & new_Q <= Q + 1) {
       cnt <- cnt + 1
