@@ -1154,5 +1154,11 @@ FLD <- function (z, feature_matrix, labels, class_quan, lambda) {
 Карта классификации ирисов Фишера алгоритмом линейного дискриминанта Фишера:
 <img src="FLD/FLD_cm.png" width="700" height="500">
 
+## Линейные алгоритмы классификации
+
+### ADALINE, правило Хэба
 Пример работы алгоритма ADALINE...:
-<img src="ADALINE/ADALINE_ex.png" width="700" height="500">
+<!--<img src="ADALINE/ADALINE_ex.png" width="700" height="500">-->
+![](ADALINE/ADALINE_rg.png)
+![](ADALINE/ADALINE_rg1.png)
+![](ADALINE/ADALINE_gb.png)
