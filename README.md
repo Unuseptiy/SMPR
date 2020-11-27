@@ -1191,7 +1191,7 @@ M(w) = y * f(x, w), где у - класс объекта х.
 Выход: вектор весов.
 
 ```R
-ADALINE <- function (feature_matrix, labels, L, L1, eps) {
+SGD <- function (feature_matrix, labels, L, L1, eps) {
   l <- dim(feature_matrix)[1]
   n <- dim(feature_matrix)[2]
   #вектор весов
