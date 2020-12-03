@@ -1339,6 +1339,7 @@ Logistic_regression <- function(feature_matrix, labels) {
 ![](lin_clf/all_rg3.png)
 ![](lin_clf/all_rg4.png)
 
+Сравнение классификаторов и функционалов ошибки
 <table>
     <tr>
         <td>
