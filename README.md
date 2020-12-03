@@ -6,14 +6,14 @@
 ## Оглавление
 1. [Метрические алгоритмы классификации](#Метрические-алгоритмы-классификации)<br>
   1.1. [Алгоритмы ближайших соседей](#Алгоритмы-ближайших-соседей)<br>
-      1.1.1. [Метод одного ближайшего соседа](#Метод-одного-ближайшего-соседа)<br>
-      1.1.2. [Метод k ближайших соседей](#Метод-k-ближайших-соседей)<br>
-      1.1.3. [Метод k взвешенных ближайших соседей](#Метод-k-взвешенных-ближайших-соседей)<br>
+      1.1.1. [Метод одного ближайшего соседа](#Метод-одного-ближайшего-соседа)<br>
+      1.1.2. [Метод k ближайших соседей](#Метод-k-ближайших-соседей)<br>
+      1.1.3. [Метод k взвешенных ближайших соседей](#Метод-k-взвешенных-ближайших-соседей)<br>
   1.2. [Метод парзеновского окна](#Метод-парзеновского-окна)<br>
   1.3. [Метод потенциальных функций](#Метод-потенциальных-функций)<br>
   1.4. [Отбор эталонных объектов](#Отбор-эталонных-объектов)<br>
-      1.4.1. [Отступы](#Отступы)<br>
-      1.4.2. [Алгоритм STOLP](#Алгоритм-STOLP)<br>
+      1.4.1. [Отступы](#Отступы)<br>
+      1.4.2. [Алгоритм STOLP](#Алгоритм-STOLP)<br>
 2. [Байесовские алгоритмы классификации](#Байесовские-алгоритмы-классификации)<br>
   2.1. [Линии уровня нормального распределения](#Линии-уровня-нормального-распределения)<br>
   2.2. [Наивный нормальный байесовский классификатор](#Наивный-нормальный-байесовский-классификатор)<br>
@@ -22,6 +22,7 @@
 3. [Линейные алгоритмы классификации](#Линейные-алгоритмы-классификации)<br>
     3.1. [Стохастический градиентный спуск](#Стохастический-градиентный-спуск)<br>
     3.2. [ADALINE](#ADALINE)<br>
+    3.3 [Правило Хэаба](#Правило-Хэбба)<br>
 
 ## Метрические алгоритмы классификации
 Одной из областей применения машинного обучения является задача классификации:
@@ -1238,7 +1239,7 @@ SGD <- function (feature_matrix, labels, L, L1, eps) {
 
 [Оглавление](#Оглавление)
 
-*ADALINE/ADALINE.R*
+*lin_clf/lin_clf.R*
 
 Если функцией потерь выбрать функцию L = (1 - M)^2, то получим классификатор,
 называющейся адаптивный линейный элемент (ADALINE).
@@ -1246,63 +1247,123 @@ SGD <- function (feature_matrix, labels, L, L1, eps) {
 Функция ***L_adaline*** реализует функцию потерь. Вход: х. Выход: значение
 функции потерь.
 
+Функция ***L1_adaline*** реализует первую производную функции потерь. Вход: х, y, w. Выход: значение
+функции потерь.
+
 Функция ***ADALINE*** реализует подбор весов для классификатора.
-Вход: матрица признаков, вектор меток, функция потерь, флаг алгоритма,
-максимальная величина ошибки. Выход: вектор весов.
+Вход: матрица признаков, вектор меток. Выход: вектор весов.
 
 ```R
-ADALINE <- function (feature_matrix, labels, L, flag, eps) {
-  l <- dim(feature_matrix)[1]
-  n <- dim(feature_matrix)[2]
-  #вектор весов
-  w <- rep(0, n)
-  left <- min(feature_matrix[,1])
-  right <- max(feature_matrix[,1])
-
-  #инициализация вектора весов
-  tmp <- 1
-  for (i in 1:n) {
-    w[i] <- runif(1, -1 / (2 * tmp), 1 / (2 * tmp))
-  }
-
-  #подсчет ошибки
-  Q <- 0
-  for (i in 1:l) {
-    Q <- Q + L((w %*% feature_matrix[i,]) * labels[i])
-  }
-
-  cnt <- 0
-  #параметр сглаживания
-  lambda <- 1 / l
-  #счетчик кол-ва итераций
-  check <- 0
-  while (Q > eps & cnt < 5) {
-    check <- check + 1
-    index <- runif(1, 1, l) %/% 1
-    epsilon <- L((w %*% feature_matrix[index,]) * labels[index])
-    if (epsilon < 1 / 100) {next}
-    if (flag == 1) {
-      etha <- 1 / feature_matrix[index,] %*% feature_matrix[index,]
-      w <- w - as.double(etha) * as.double(((w %*% feature_matrix[index,]) - labels[index])) * feature_matrix[index,]
-    }
-    if (flag == 2) {
-      etha <- 1 / check
-      if (epsilon > 0) w <- w + as.double(etha) * feature_matrix[index,] * labels[index]
-    }
-    new_Q <- (1 - lambda) * Q + lambda * epsilon
-    if (new_Q >= Q - 1 & new_Q <= Q + 1) {
-      cnt <- cnt + 1
-    }
-    else {
-      Q <- new_Q
-      cnt <- 0
-    }
-  }
-  return(w)
+ADALINE <- function(feature_matrix, labels) {
+  weight <- SGD(feature_matrix, labels, L_adaline, flag = 1, eps = 5)
+  return(weight)
 }
 ```
-Пример работы алгоритма ADALINE...:
+Пример работы алгоритма ADALINE:
 <!--<img src="ADALINE/ADALINE_ex.png" width="700" height="500">-->
-![](ADALINE/ADALINE_rg.png)
-![](ADALINE/ADALINE_rg1.png)
-![](ADALINE/ADALINE_gb.png)
+![](lin_clf/ADALINE_hyp_gb1.png)
+![](lin_clf/ADALINE_hyp_rg1.png)
+![](lin_clf/ADALINE_hyp_rg3.png)
+
+### Правило Хэбба
+
+[Оглавление](#Оглавление)
+
+Если функцией потерь выбрать функцию L = (-M)+, то получим классификатор,
+называющейся правилом Хэбба.
+
+Функция ***L_hebb*** реализует функцию потерь. Вход: х. Выход: значение
+функции потерь.
+
+Функция ***L1_hebb*** реализует первую производную функции потерь. Вход: х, y, w. Выход: значение
+функции потерь.
+
+Функция ***Hebbs_rule*** реализует подбор весов для классификатора.
+Вход: матрица признаков, вектор меток. Выход: вектор весов.
+
+```R
+Hebbs_rule <- function(feature_matrix, labels) {
+  weight <- SGD(feature_matrix, labels, L_hebb, flag = 2, eps = 5)
+  return(weight)
+}
+```
+
+Пример работы правила Хэба:
+<!--<img src="ADALINE/ADALINE_ex.png" width="700" height="500">-->
+![](lin_clf/hebb_hyp_gb1.png)
+![](lin_clf/hebb_hyp_gb2.png)
+![](lin_clf/hebb_hyp_rg1.png)
+![](lin_clf/hebb_hyp_rg2.png)
+
+### Логистическая регрессия 
+
+[Оглавление](#Оглавление)
+
+Если функцией потерь выбрать функцию L = log(1 + exp(-М),2)), то получим классификатор,
+называющейся линеным регрессором.
+
+Функция ***L_logistic*** реализует функцию потерь. Вход: х. Выход: значение
+функции потерь.
+
+Функция ***L1_logistic*** реализует первую производную функции потерь. Вход: х, y, w. Выход: значение
+функции потерь.
+
+Функция ***Logistic_regression*** реализует подбор весов для классификатора.
+Вход: матрица признаков, вектор меток. Выход: вектор весов.
+
+```R
+Logistic_regression <- function(feature_matrix, labels) {
+  weight <- SGD(feature_matrix, labels, L_logistic, flag = 3, eps = 5)
+  return(weight)
+}
+```
+
+Пример работы логистической регресси:
+<!--<img src="ADALINE/ADALINE_ex.png" width="700" height="500">-->
+![](lin_clf/log_reg_hyp_gb.png)
+![](lin_clf/log_reg_hyp_rg1.png)
+![](lin_clf/log_reg_hyp_rg2.png)
+
+Карты распределения апостериорной вероятности по обучающей выборке:
+![](lin_clf/log_reg_apos_rg.png)
+![](lin_clf/log_reg_apos_rg1.png)
+![](lin_clf/log_reg_apos_rg2.png)
+![](lin_clf/log_reg_apos_rg3.png)
+![](lin_clf/log_reg_apos_gb1.png)
+![](lin_clf/log_reg_apos_gb2.png)
+
+
+Линейные классификаторы:
+![](lin_clf/all_gb.png)
+![](lin_clf/all_rg3.png)
+![](lin_clf/all_rg4.png)
+
+<table>
+    <tr>
+        <td>
+        ![](lin_clf/ADALINE_hyp_rg2.png)
+        </td>
+        <td>
+        ![](lin_clf/ADALINE_Q.png)
+        </td>
+    </tr>
+    <tr>
+        <td>
+        ![](lin_clf/hebb_hyp_rg1.png)
+        </td>
+        <td>
+        ![](lin_clf/hebb_Q.png)
+        </td>
+    </tr>
+    <tr>
+        <td>
+        ![](lin_clf/log_reg_hyp_rg2.png)
+        </td>
+        <td>
+        ![](lin_clf/log_Q.png)
+        </td>
+    </tr>
+    
+</table>
+
+
