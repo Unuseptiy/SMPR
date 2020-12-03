@@ -23,6 +23,7 @@
     3.1. [Стохастический градиентный спуск](#Стохастический-градиентный-спуск)<br>
     3.2. [ADALINE](#ADALINE)<br>
     3.3 [Правило Хэаба](#Правило-Хэбба)<br>
+    3.4 [Логистическая регрессия](#Логистическая-регрессия)<br>
 
 ## Метрические алгоритмы классификации
 Одной из областей применения машинного обучения является задача классификации:
@@ -1222,7 +1223,7 @@ SGD <- function (feature_matrix, labels, L, L1, eps) {
     index <- runif(1, 1, l) %/% 1
     epsilon <- L((w %*% feature_matrix[index,]) * labels[index])
     etha <- 1 / check
-    w <- w - as.double(etha) * L1(feature_matrix[index,])
+    w <- w - as.double(etha) * L1(feature_matrix[index,], labels[index], w)
     new_Q <- (1 - lambda) * Q + lambda * epsilon
     if (new_Q >= Q - 1 & new_Q <= Q + 1) {
       cnt <- cnt + 1
@@ -1327,8 +1328,8 @@ Logistic_regression <- function(feature_matrix, labels) {
 Карты распределения апостериорной вероятности по обучающей выборке:
 ![](lin_clf/log_reg_apos_rg.png)
 ![](lin_clf/log_reg_apos_rg1.png)
-![](lin_clf/log_reg_apos_rg2.png)
 ![](lin_clf/log_reg_apos_rg3.png)
+![](lin_clf/log_reg_apos_rg4.png)
 ![](lin_clf/log_reg_apos_gb1.png)
 ![](lin_clf/log_reg_apos_gb2.png)
 
@@ -1341,26 +1342,26 @@ Logistic_regression <- function(feature_matrix, labels) {
 <table>
     <tr>
         <td>
-        ![](lin_clf/ADALINE_hyp_rg2.png)
+        <img src="lin_clf/ADALINE_hyp_rg2.png">
         </td>
         <td>
-        ![](lin_clf/ADALINE_Q.png)
-        </td>
-    </tr>
-    <tr>
-        <td>
-        ![](lin_clf/hebb_hyp_rg1.png)
-        </td>
-        <td>
-        ![](lin_clf/hebb_Q.png)
+        <img src="lin_clf/ADALINE_Q.png">
         </td>
     </tr>
     <tr>
         <td>
-        ![](lin_clf/log_reg_hyp_rg2.png)
+        <img src="lin_clf/hebb_hyp_rg1.png">
         </td>
         <td>
-        ![](lin_clf/log_Q.png)
+        <img src="lin_clf/hebb_Q.png">
+        </td>
+    </tr>
+    <tr>
+        <td>
+        <img src="lin_clf/log_reg_hyp_rg2.png">
+        </td>
+        <td>
+        <img src="lin_clf/log_Q.png">
         </td>
     </tr>
     
