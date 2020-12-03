@@ -1,0 +1,279 @@
+# все, что тут используется как АДАЛАЙН переделать на СГД
+# еще надо будет добавить передачу градиента, чтобы убрать реализацию через флаги
+SGD <- function (feature_matrix, labels, L, flag, eps) {
+  l <- dim(feature_matrix)[1]
+  n <- dim(feature_matrix)[2]
+
+  #вектор весов
+  w <- rep(0, n)
+
+  # вспомогательный вектор весов, хранящий веса, с которыми
+  # ошибка минимальна (используется когда стабилизируется функционал ошибки)
+  better_w <- rep(0, n)
+
+  #параметры для отрисовки линии
+  #left <- min(feature_matrix[,1])
+  #right <- max(feature_matrix[,1])
+  #coords <- matrix(0, 0, 2)
+
+  #инициализация вектора весов слцчайнфми небольшими значениями
+  tmp <- 1
+  for (i in 1:n) {
+    w[i] <- runif(1, -1 / (2 * tmp), 1 / (2 * tmp))
+  }
+
+  #подсчет ошибки
+  Q <- 0
+  for (i in 1:l) {
+    Q <- Q + L((w %*% feature_matrix[i,]) * labels[i])
+  }
+
+  # счетчик кол-ва итераций на которых Q менялся незначительно
+  # в пределах [Q - 1e-2; Q + 1e-2]
+  cnt <- 0
+
+  #параметр сглаживания
+  lambda <- 1 / l
+
+  #счетчик кол-ва шагов
+  check <- 0
+
+  #счетчик кол-ва шагов, на которых min(Q) не меняется
+  min_cnt <- 0
+  min_Q <- 1e6
+
+  # выходим из массива, если:
+  # ошибка Q меньше некоторой заданной;
+  # количество шагов, на которых Q меняется незначительно больше некоторого заданного;
+  # количество шагов, на которых Q не уменьшалось больше некоторого заданного.
+  # если условие на небольшое отклонение не будет использоваться -- удалить cnt
+  while (Q > eps & cnt < 10 & min_cnt < 500) {
+    check <- check + 1
+
+    # выбираем случайный элемент
+    index <- runif(1, 1, l) %/% 1
+
+    # считаем ошибку на нем
+    epsilon <- L((w %*% feature_matrix[index,]) * labels[index])
+
+    # измение Q и w, в зависимости от выбранного лин клф:
+    # ADALINE
+    if (flag == 1) {
+      if (epsilon < 1e-2) {next}
+      etha <- 1 / feature_matrix[index,] %*% feature_matrix[index,]
+      w <- w - as.double(etha) * as.double(((w %*% feature_matrix[index,]) - labels[index])) * feature_matrix[index,]
+    }
+
+    # Hebbs rule
+    if (flag == 2) {
+      etha <- 1 / check
+      if (epsilon > 0) w <- w + as.double(etha) * feature_matrix[index,] * labels[index]
+    }
+
+    # Logistic regression
+    if (flag == 3) {
+      etha <- 1 / check
+      w <- w + etha * feature_matrix[index,] * labels[index] * sigmoid(as.double(-w %*% feature_matrix[index,]) * labels[index])
+    }
+
+
+    ######################################################################################################
+    # эта запись для второго критерия выхода из массива
+    #new_Q <- (1 - lambda) * Q + lambda * epsilon
+    #print(c(epsilon, Q, new_Q, cnt))
+    ## сравниваем новое Q с Q, полученным на предыдущих шагах и, если оно отличается
+    ## меньше, чем на 1е-6, то Q не меняем, иначе -- меняем
+    # это условие не надо в связи с тем, что условие на изменение минимума сильнее
+    # (а если минимум меняется, но не сильно? тогда это уловие может сыграть свою роль)
+    #if (new_Q >= Q - 1e-2 & new_Q <= Q + 1e-2) {
+    #  cnt <- cnt + 1
+    #}
+    #else {
+    #  Q <- new_Q
+    #  cnt <- 0
+    #}
+    ######################################################################################################
+
+    Q <- (1 - lambda) * Q + lambda * epsilon
+    print(c(epsilon, Q, min_Q, min_cnt))
+    # если Q не стало меньше минимального, полученного на предыдущих шагах, то не меняем его,
+    # иначе -- меняем и обновляем счетчик шагов без изменения минимума и вектор лучших весов.
+    if (Q >= min_Q) {
+      min_cnt <- min_cnt + 1
+    } else {
+      min_Q <- Q
+      min_cnt <- 0
+      better_w <- w
+    }
+
+    # затратная отрисовка
+    #for (i in seq(left, right, 0.1)) {
+    #  y <- (-w[1] * i - w[3]) / w[2]
+    #  coords <- rbind(coords, c(i, y))
+    #}
+    #points(coords, type="l", col = "red")
+
+    # незатратная отрисовка
+    if (Q >= eps) abline(a = -w[3] / w[2], b = -w[1] / w[2], col = "blue")
+  }
+  #print(w)
+  return(better_w)
+}
+
+L_adaline <- function(x) {
+  return((x - 1) ^ 2)
+}
+
+L_hebb <- function(x){
+  if (x < 0) return(-x)
+  else return(0)
+}
+
+L_logistic <- function(x) {
+  return(log(1 + exp(-x),2))
+}
+
+L_SVM <- function(x) {
+  return((1 - x) * ((1 - x) > 0))
+}
+
+
+
+ADALINE <- function(feature_matrix, labels) {
+  weight <- SGD(feature_matrix, labels, L_adaline, 1, 0)
+  return(weight)
+}
+
+Hebbs_rule <- function(feature_matrix, labels) {
+  weight <- SGD(feature_matrix, labels, L_hebb, 2, 2)
+  return(weight)
+}
+
+Logistic_regression <- function(feature_matrix, labels) {
+  weight <- SGD(feature_matrix, labels, L_logistic, 3, 5)
+  return(weight)
+}
+
+sigmoid <- function(x) {
+  return(1 / (1 + exp(-x)))
+}
+
+#работа на ирисах
+u <- 1
+b <- 100
+colors <- c("setosa" = "red", "versicolor" = "green3", "virginica" = "blue")
+plot(iris[u:b,3:4], pch = 21, col = colors[iris[u:b,5]], bg = colors[iris[u:b,5]], main = "Построение разделяющей гиперплоскости\nc помощью логистической регресси")
+tmp <- matrix(0, 100, 1)
+for (i in 1:100) {
+  tmp[i] <- 1
+}
+
+# формируем обучающую выборку
+feature_matrix <- cbind(as.matrix(iris[u:b, 3:4]), tmp)
+labels <- rep(1, 100)
+for (i in 1:50) {
+  labels[i] <- -1
+}
+
+weight <- Logistic_regression(feature_matrix, labels)
+points(iris[u:b,3:4], pch = 21, col = colors[iris[u:b,5]], bg = colors[iris[u:b,5]])
+#weight
+
+## затратная отрисовка
+#l <- min(iris$Petal.Length)
+#r <- max(iris$Petal.Length)
+#coords <- matrix(0, 0, 2)
+#for (x in seq(2.5, r, 0.1)) {
+#  y <- (-weight[1] * x - weight[3]) / weight[2]
+#  coords <- rbind(coords, c(x, y))
+#}
+#points(coords, type="l", col = "black")
+
+#coords
+# легкая отрисовка посчитанной гиперплоскости
+abline(a = -weight[3] / weight[2], b = -weight[1] / weight[2], col = "yellow")
+
+Q <- 0
+length <- 100
+L <- L_logistic
+for (i in 1:length) {
+    Q <- Q + L((weight %*% feature_matrix[i,]) * labels[i])
+}
+Q
+print("====================================================================")
+
+
+
+
+#
+##функция считает апостериорную вероятность
+#aposterior <- function(w, x, y) {
+#  return(sigmoid((w %*% x) * y))
+#}
+#
+##считаем апостериорную вероятность эл-тов обучающей выборки
+#PYX <- rep(0, b - u + 1)
+#for (i in u:b) {
+#  PYX[i - u + 1] <- aposterior(weight, feature_matrix[i,], labels[i])
+#}
+#PYX
+#max_ver <- max(PYX)
+#max_ver
+#tmp_colors <- rep(0, 100)
+##подбор интенсичности цветов
+#for (i in u:b) {
+#  alpha <- 255 %/% max_ver * PYX[i - u + 1]
+#  if (i - u + 1 <= 50) {
+#  tmp_colors[i - u + 1] <- rgb(255, 0,0, alpha,,255)
+#  } else {
+#    tmp_colors[i - u + 1] <- rgb(0, 255,0, alpha,,255)
+#  }
+#
+#}
+#plot(iris[u:b,3:4], pch = 21, bg = tmp_colors, col = tmp_colors, xlab = "Petal.Length", ylab = "Petal.Width", main = "Апостериорные вероятности для логистической регрессии")
+#points(coords, type="l", col = "yellow")
+
+#генерация выборки
+#fx <- runif(50,-1,-0.1)
+#fy <- runif(50,0,3)
+#
+#sx <- runif(50, 0.1,1)
+#sy <- runif(50, 0,3)
+#
+#fclass <- cbind.data.frame(fx, fy, 1)
+#sclass <- cbind.data.frame(sx, sy, -1)
+#
+#tip_name <- c("one", "two", "thri")
+#
+#names(fclass) <- tip_name
+#names(sclass) <- tip_name
+#
+#for_ADALINE <- rbind.data.frame(fclass, sclass)
+#labels <- for_ADALINE[,3]
+#for_ADALINE[,3] <- rep(1, dim(for_ADALINE)[1])
+#colors <- c("1"="red", "-1"="green")
+#plot(for_ADALINE[,1:2], pch = 21, col=colors[as.character(labels)], bg = colors[as.character(labels)])
+##for_ADALINE$thri <- as.factor(for_ADALINE$thri)
+#
+#weight <- ADALINE(z, as.matrix(for_ADALINE), labels, L_adaline, 1, 20)
+#points(for_ADALINE[,1:2], pch = 21, col=colors[as.character(labels)], bg = colors[as.character(labels)])
+#print("Weight")
+#weight
+#l <- min(for_ADALINE$one)
+#r <- max(for_ADALINE$one)
+#coords <- matrix(0, 0, 2)
+#for (x in seq(l, r, 0.1)) {
+#  y <- (-weight[1] * x - weight[3]) / weight[2]
+#  coords <- rbind(coords, c(x, y))
+#}
+#points(coords, type="l", col = "yellow")
+#
+#Q <- 0
+#l <- 100
+#L <- L_adaline
+##labels
+#for (i in 1:l) {
+#    Q <- Q + L((weight %*% as.double(for_ADALINE[i,])) * labels[i])
+#}
+#print("Q")
+#Q
