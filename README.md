@@ -1353,7 +1353,7 @@ Logistic_regression <- function(feature_matrix, labels) {
         <img src="lin_clf/hebb_hyp_rg1.png">
         </td>
         <td>
-        <img src="lin_clf/hebb_Q.png">
+        <img src="lin_clf/Hebb_Q.png">
         </td>
     </tr>
     <tr>
@@ -1361,7 +1361,7 @@ Logistic_regression <- function(feature_matrix, labels) {
         <img src="lin_clf/log_reg_hyp_rg2.png">
         </td>
         <td>
-        <img src="lin_clf/log_Q.png">
+        <img src="lin_clf/log_reg_Q.png">
         </td>
     </tr>
     
