@@ -1193,15 +1193,18 @@ M(w) = y * f(x, w), где у - класс объекта х.
 Выход: вектор весов.
 
 ```R
-SGD <- function (feature_matrix, labels, L, L1, eps) {
+SGD <- function (feature_matrix, labels, L, flag, eps) {
   l <- dim(feature_matrix)[1]
   n <- dim(feature_matrix)[2]
+
   #вектор весов
   w <- rep(0, n)
-  left <- min(feature_matrix[,1])
-  right <- max(feature_matrix[,1])
 
-  #инициализация вектора весов
+  # вспомогательный вектор весов, хранящий веса, с которыми
+  # ошибка минимальна (используется когда стабилизируется функционал ошибки)
+  better_w <- rep(0, n)
+
+  #инициализация вектора весов слцчайнфми небольшими значениями
   tmp <- 1
   for (i in 1:n) {
     w[i] <- runif(1, -1 / (2 * tmp), 1 / (2 * tmp))
@@ -1213,27 +1216,51 @@ SGD <- function (feature_matrix, labels, L, L1, eps) {
     Q <- Q + L((w %*% feature_matrix[i,]) * labels[i])
   }
 
-  cnt <- 0
   #параметр сглаживания
   lambda <- 1 / l
-  #счетчик кол-ва итераций
+
+  #счетчик кол-ва шагов
   check <- 0
-  while (Q > eps & cnt < 5) {
+
+  #счетчик кол-ва шагов, на которых min(Q) не меняется
+  min_cnt <- 0
+  min_Q <- 1e6
+
+  # выходим из массива, если:
+  # ошибка Q меньше некоторой заданной;
+  # количество шагов, на которых Q не уменьшалось больше некоторого заданного.
+  while (Q > eps & min_cnt < 500) {
     check <- check + 1
+
+    # выбираем случайный элемент
     index <- runif(1, 1, l) %/% 1
+
+    # считаем ошибку на нем
     epsilon <- L((w %*% feature_matrix[index,]) * labels[index])
+    
+    # считаем величину шага
     etha <- 1 / check
+
+    # обновляем веса
     w <- w - as.double(etha) * L1(feature_matrix[index,], labels[index], w)
-    new_Q <- (1 - lambda) * Q + lambda * epsilon
-    if (new_Q >= Q - 1 & new_Q <= Q + 1) {
-      cnt <- cnt + 1
+
+    Q <- (1 - lambda) * Q + lambda * epsilon
+
+    # если Q не стало меньше минимального, полученного на предыдущих шагах, то не меняем его,
+    # иначе -- меняем и обновляем счетчик шагов без изменения минимума и вектор лучших весов.
+    if (Q >= min_Q) {
+      min_cnt <- min_cnt + 1
+    } else {
+      min_Q <- Q
+      min_cnt <- 0
+      better_w <- w
     }
-    else {
-      Q <- new_Q
-      cnt <- 0
-    }
+
+    # незатратная отрисовка
+    if (Q >= eps) abline(a = -w[3] / w[2], b = -w[1] / w[2], col = "blue")
   }
-  return(w)
+
+  return(better_w)
 }
 ```
 ### ADALINE
@@ -1290,9 +1317,8 @@ Hebbs_rule <- function(feature_matrix, labels) {
 ```
 
 Пример работы правила Хэба:
-<!--<img src="ADALINE/ADALINE_ex.png" width="700" height="500">-->
-![](lin_clf/hebb_hyp_gb1.png)
-![](lin_clf/hebb_hyp_gb2.png)
+![](lin_clf/hebb_hyp_gb3.png)
+<!--![](lin_clf/hebb_hyp_gb2.png)-->
 ![](lin_clf/hebb_hyp_rg1.png)
 ![](lin_clf/hebb_hyp_rg2.png)
 
@@ -1321,7 +1347,7 @@ Logistic_regression <- function(feature_matrix, labels) {
 
 Пример работы логистической регресси:
 <!--<img src="ADALINE/ADALINE_ex.png" width="700" height="500">-->
-![](lin_clf/log_reg_hyp_gb.png)
+![](lin_clf/log_reg_hyp_gb1.png)
 ![](lin_clf/log_reg_hyp_rg1.png)
 ![](lin_clf/log_reg_hyp_rg2.png)
 
@@ -1367,5 +1393,3 @@ Logistic_regression <- function(feature_matrix, labels) {
     </tr>
     
 </table>
-
-
