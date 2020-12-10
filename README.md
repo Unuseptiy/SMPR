@@ -1193,9 +1193,10 @@ M(w) = y * f(x, w), где у - класс объекта х.
 Выход: вектор весов.
 
 ```R
-SGD <- function (feature_matrix, labels, L, flag, eps) {
+SGD <- function (feature_matrix, labels, L, L1, flag = 0, eps) {
   l <- dim(feature_matrix)[1]
   n <- dim(feature_matrix)[2]
+  err <- matrix(0, l, 2)
 
   #вектор весов
   w <- rep(0, n)
@@ -1204,7 +1205,7 @@ SGD <- function (feature_matrix, labels, L, flag, eps) {
   # ошибка минимальна (используется когда стабилизируется функционал ошибки)
   better_w <- rep(0, n)
 
-  #инициализация вектора весов слцчайнфми небольшими значениями
+  #инициализация вектора весов слцчайными небольшими значениями
   tmp <- 1
   for (i in 1:n) {
     w[i] <- runif(1, -1 / (2 * tmp), 1 / (2 * tmp))
@@ -1213,11 +1214,16 @@ SGD <- function (feature_matrix, labels, L, flag, eps) {
   #подсчет ошибки
   Q <- 0
   for (i in 1:l) {
-    Q <- Q + L((w %*% feature_matrix[i,]) * labels[i])
+    Q <- Q + L(M(feature_matrix[i,], labels[i], w))
+    err[i,] <- c(i, L(M(feature_matrix[i,], labels[i], w)))
   }
+  err <- err[order(err[,2], decreasing = TRUE),]
+
+  Q_arr <- vector()
+  Q_arr <- c(Q_arr, Q)
 
   #параметр сглаживания
-  lambda <- 1 / l
+  #lambda <- 1 / l
 
   #счетчик кол-ва шагов
   check <- 0
@@ -1229,22 +1235,29 @@ SGD <- function (feature_matrix, labels, L, flag, eps) {
   # выходим из массива, если:
   # ошибка Q меньше некоторой заданной;
   # количество шагов, на которых Q не уменьшалось больше некоторого заданного.
-  while (Q > eps & min_cnt < 500) {
+  while (Q > eps & min_cnt < 100) {
     check <- check + 1
 
-    # выбираем случайный элемент
-    index <- runif(1, 1, l) %/% 1
+    #выбираем элт на котором большая ошибка
+    if (flag == 1) {
+      index <- err[1,1]
+    } else {
+      index <- runif(1, 1, l) %/% 1
+    }
 
     # считаем ошибку на нем
-    epsilon <- L((w %*% feature_matrix[index,]) * labels[index])
-    
-    # считаем величину шага
-    etha <- 1 / check
+    epsilon <- L(M(feature_matrix[index,], labels[index], w))
 
-    # обновляем веса
-    w <- w - as.double(etha) * L1(feature_matrix[index,], labels[index], w)
+    etha <- 1 / as.double(feature_matrix[index,] %*% feature_matrix[index,])
+    w <- w - etha * L1(feature_matrix[index,], labels[index], w)
 
-    Q <- (1 - lambda) * Q + lambda * epsilon
+    Q <- 0
+    for (i in 1:l) {
+      Q <- Q + L(M(feature_matrix[i,], labels[i], w))
+      err[i,] <- c(i, L(M(feature_matrix[i,], labels[i], w)))
+    }
+    err <- err[order(err[,2], decreasing = TRUE),]
+    print(c(check, epsilon, Q, min_Q, min_cnt))
 
     # если Q не стало меньше минимального, полученного на предыдущих шагах, то не меняем его,
     # иначе -- меняем и обновляем счетчик шагов без изменения минимума и вектор лучших весов.
@@ -1255,11 +1268,7 @@ SGD <- function (feature_matrix, labels, L, flag, eps) {
       min_cnt <- 0
       better_w <- w
     }
-
-    # незатратная отрисовка
-    if (Q >= eps) abline(a = -w[3] / w[2], b = -w[1] / w[2], col = "blue")
   }
-
   return(better_w)
 }
 ```
@@ -1283,15 +1292,14 @@ SGD <- function (feature_matrix, labels, L, flag, eps) {
 
 ```R
 ADALINE <- function(feature_matrix, labels) {
-  weight <- SGD(feature_matrix, labels, L_adaline, flag = 1, eps = 5)
+  weight <- SGD(feature_matrix, labels, L_adaline, , eps = 5)
   return(weight)
 }
 ```
 Пример работы алгоритма ADALINE:
 <!--<img src="ADALINE/ADALINE_ex.png" width="700" height="500">-->
-![](lin_clf/ADALINE_hyp_gb1.png)
-![](lin_clf/ADALINE_hyp_rg1.png)
-![](lin_clf/ADALINE_hyp_rg3.png)
+![](linear_clf/ADALINE_hyp_gb.png)
+![](linear_clf/ADALINE_hyp_rg.png)
 
 ### Правило Хэбба
 
@@ -1311,16 +1319,14 @@ ADALINE <- function(feature_matrix, labels) {
 
 ```R
 Hebbs_rule <- function(feature_matrix, labels) {
-  weight <- SGD(feature_matrix, labels, L_hebb, flag = 2, eps = 5)
+  weight <- SGD(feature_matrix, labels, L_hebb, , eps = 5)
   return(weight)
 }
 ```
 
 Пример работы правила Хэба:
-![](lin_clf/hebb_hyp_gb3.png)
-<!--![](lin_clf/hebb_hyp_gb2.png)-->
-![](lin_clf/hebb_hyp_rg1.png)
-![](lin_clf/hebb_hyp_rg2.png)
+![](linear_clf/Hebb_hyp_gb.png)
+![](linear_clf/Hebb_hyp_rg.png)
 
 ### Логистическая регрессия 
 
@@ -1340,55 +1346,55 @@ Hebbs_rule <- function(feature_matrix, labels) {
 
 ```R
 Logistic_regression <- function(feature_matrix, labels) {
-  weight <- SGD(feature_matrix, labels, L_logistic, flag = 3, eps = 5)
+  weight <- SGD(feature_matrix, labels, L_logistic, , eps = 5)
   return(weight)
 }
 ```
 
 Пример работы логистической регресси:
 <!--<img src="ADALINE/ADALINE_ex.png" width="700" height="500">-->
-![](lin_clf/log_reg_hyp_gb1.png)
-![](lin_clf/log_reg_hyp_rg1.png)
-![](lin_clf/log_reg_hyp_rg2.png)
+![](linear_clf/log_hyp_gb.png)
+![](linear_clf/log_hyp_rg.png)
+
 
 Карты распределения апостериорной вероятности по обучающей выборке:
-![](lin_clf/log_reg_apos_rg.png)
+# ДОБАВИТЬ
+<!--![](lin_clf/log_reg_apos_rg.png)
 ![](lin_clf/log_reg_apos_rg1.png)
 ![](lin_clf/log_reg_apos_rg3.png)
 ![](lin_clf/log_reg_apos_rg4.png)
 ![](lin_clf/log_reg_apos_gb1.png)
-![](lin_clf/log_reg_apos_gb2.png)
+![](lin_clf/log_reg_apos_gb2.png)-->
 
 
 Линейные классификаторы:
-![](lin_clf/all_gb.png)
-![](lin_clf/all_rg3.png)
-![](lin_clf/all_rg4.png)
+![](linear_clf/all_hyp_gb.png)
+![](linear_clf/all_hyp_rg.png)
 
 Сравнение классификаторов и функционалов ошибки
 <table>
     <tr>
         <td>
-        <img src="lin_clf/ADALINE_hyp_rg2.png">
+        <img src="linear_clf/ADALINE_hyp_rg.png">
         </td>
         <td>
-        <img src="lin_clf/ADALINE_Q.png">
-        </td>
-    </tr>
-    <tr>
-        <td>
-        <img src="lin_clf/hebb_hyp_rg1.png">
-        </td>
-        <td>
-        <img src="lin_clf/Hebb_Q.png">
+        <img src="linear_clf/ADALINE_Q.png">
         </td>
     </tr>
     <tr>
         <td>
-        <img src="lin_clf/log_reg_hyp_rg2.png">
+        <img src="linear_clf/Hebb_hyp_rg.png">
         </td>
         <td>
-        <img src="lin_clf/log_reg_Q.png">
+        <img src="linear_clf/Hebb_Q.png">
+        </td>
+    </tr>
+    <tr>
+        <td>
+        <img src="linear_clf/log_hyp_rg.png">
+        </td>
+        <td>
+        <img src="linear_clf/log_Q.png">
         </td>
     </tr>
     
