@@ -1323,7 +1323,7 @@ Hebbs_rule <- function(feature_matrix, labels) {
 }
 ```
 
-Пример работы правила Хэба:
+Пример работы правила Хэбба:
 ![](linear_clf/Hebb_hyp_gb.png)
 ![](linear_clf/Hebb_hyp_rg.png)
 
