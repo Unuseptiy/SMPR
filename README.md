@@ -1298,7 +1298,7 @@ ADALINE <- function(feature_matrix, labels) {
 ```
 Пример работы алгоритма ADALINE:
 <!--<img src="ADALINE/ADALINE_ex.png" width="700" height="500">-->
-![](linear_clf/ADALINE_hyp_gb2.png)
+![](linear_clf/ADALINE_hyp_gb3.png)
 ![](linear_clf/ADALINE_hyp_rg.png)
 
 ### Правило Хэбба
