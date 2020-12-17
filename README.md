@@ -726,7 +726,8 @@ STOLP <- function (feature_matrix, labels, l0) {
 на плоскость XOY.
 
 Плотность n-мерного нормального распределения задается формулой:
-<img src="level_curves/gaus.png" height="100">
+<!--<img src="level_curves/gaus.png" height="100">-->
+![](level_curves/gaus.png)
 
 Выведем из нее уравнение для линий уровня.
 
@@ -744,11 +745,13 @@ STOLP <- function (feature_matrix, labels, l0) {
 
 В итоге получаем формулу:
 
-<img src="level_curves/form1_new.png" width="500" height="80">
+<!--<img src="level_curves/form1_new.png" width="500" height="80">-->
+![](level_curves/form1_new.png)
 
 Расскрывая К, получим формулу линий уровня нормального распределения:
 
-<img src="level_curves/form2.png" height="150">
+<!--<img src="level_curves/form2.png" height="150">-->
+![](level_curves/form2.png)
 
 Файл содержит скрипт на языке R, отрисовывающий линии уровня для заданного
 n-мерного нормального распределения (которое задается матожиданием и матрицей
@@ -999,7 +1002,8 @@ NNBC <- function(z, feature_matrix, labels, class_quan, lambda){
 
 Можно выписать в аналитическом виде формулы разделяющих классы гиперплоскостей:
 
-<img src="plug-in/div.png" height="150">
+<!--<img src="plug-in/div.png" height="150">-->
+![](plug-in/div.png)
 
 Функция ***mat_expect*** аналогична соответствующей из *NNBC/NNBC.R*.
 
