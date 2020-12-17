@@ -22,7 +22,7 @@
 3. [Линейные алгоритмы классификации](#Линейные-алгоритмы-классификации)<br>
     3.1. [Стохастический градиентный спуск](#Стохастический-градиентный-спуск)<br>
     3.2. [ADALINE](#ADALINE)<br>
-    3.3 [Правило Хэбба](#Правило-Хэбба)<br>
+    3.3 [Правило Хэаба](#Правило-Хэбба)<br>
     3.4 [Логистическая регрессия](#Логистическая-регрессия)<br>
 
 ## Метрические алгоритмы классификации
@@ -1297,8 +1297,9 @@ ADALINE <- function(feature_matrix, labels) {
 }
 ```
 Пример работы алгоритма ADALINE:
-![](linear_clf/ADALINE_hyp_gb4.png)
-![](linear_clf/ADALINE_hyp_rg1.png)
+<!--<img src="ADALINE/ADALINE_ex.png" width="700" height="500">-->
+![](linear_clf/ADALINE_hyp_gb1.png)
+![](linear_clf/ADALINE_hyp_rg.png)
 
 ### Правило Хэбба
 
@@ -1323,7 +1324,7 @@ Hebbs_rule <- function(feature_matrix, labels) {
 }
 ```
 
-Пример работы правила Хэбба:
+Пример работы правила Хэба:
 ![](linear_clf/Hebb_hyp_gb.png)
 ![](linear_clf/Hebb_hyp_rg.png)
 
@@ -1356,15 +1357,9 @@ Logistic_regression <- function(feature_matrix, labels) {
 ![](linear_clf/log_hyp_rg.png)
 
 
-Карты распределения апостериорной вероятности по обучающей выборке:
-# ДОБАВИТЬ
-<!--![](lin_clf/log_reg_apos_rg.png)
-![](lin_clf/log_reg_apos_rg1.png)
-![](lin_clf/log_reg_apos_rg3.png)
-![](lin_clf/log_reg_apos_rg4.png)
-![](lin_clf/log_reg_apos_gb1.png)
-![](lin_clf/log_reg_apos_gb2.png)-->
-
+Карты распределения апостериорной вероятности:
+![](linear_clf/log_CM_apos_rg.png)
+![](linear_clf/log_CM_apos_gb.png)
 
 Линейные классификаторы:
 ![](linear_clf/all_hyp_gb.png)
