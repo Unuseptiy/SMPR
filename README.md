@@ -1352,9 +1352,8 @@ Logistic_regression <- function(feature_matrix, labels) {
 ```
 
 Пример работы логистической регресси:
-<!--<img src="ADALINE/ADALINE_ex.png" width="700" height="500">-->
-![](linear_clf/log_hyp_gb.png)
-![](linear_clf/log_hyp_rg.png)
+![](linear_clf/log_hyp_gb1.png)
+![](linear_clf/log_hyp_rg1.png)
 
 
 Карты распределения апостериорной вероятности:
