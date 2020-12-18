@@ -1584,10 +1584,6 @@ ROC <- function(d, w) {
 
 Пример работы алгоритма:
 
-![](SVM/ROC_lin.png)
-![](SVM/ROC_nelin1.png)
-![](SVM/ROC_nelin2.png)
-
 <table>
     <tr>
         <td>
