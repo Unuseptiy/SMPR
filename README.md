@@ -1523,10 +1523,10 @@ Log_reg_clf <- function (z, feature_matrix, labels)  {
             Линейно<br>неразделимая<br>выборка
         </td>
         <td>
-            <img src="SVM/nelin_nelin.png"/>
+            <img src="SVM/nelin_lin.png"/>
         </td>
         <td>
-            <img src="SVM/nelin_lin.png"/>
+            <img src="SVM/nelin_nelin.png"/>
         </td>
     </tr>
 </table>
@@ -1587,3 +1587,39 @@ ROC <- function(d, w) {
 ![](SVM/ROC_lin.png)
 ![](SVM/ROC_nelin1.png)
 ![](SVM/ROC_nelin2.png)
+
+<table>
+    <tr>
+        <td>
+            Линейно<br>разделимая<br>выборка
+        </td>
+        <td>
+            <img src="SVM/lin_lin.png"/>
+        </td>
+        <td>
+            <img src="SVM/ROC_lin.png"/>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            Линейно<br>неразделимая<br>выборка
+        </td>
+        <td>
+            <img src="SVM/nelin_lin.png"/>
+        </td>
+        <td>
+            <img src="SVM/ROC_nelin1.png"/>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            Линейно<br>неразделимая<br>выборка
+        </td>
+        <td>
+            <img src="SVM/nelin_nelin2.png"/>
+        </td>
+        <td>
+            <img src="SVM/ROC_nelin2.png"/>
+        </td>
+    </tr>
+</table>
