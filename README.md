@@ -1479,8 +1479,7 @@ Log_reg_clf <- function (z, feature_matrix, labels)  {
 
 Еще не придуманы оптимальные методы определения ядра для разных задач.
 
-Классификатор в этом случае принимает вид.
-
+Классификатор в этом случае принимает вид:
 ![](SVM/classi_core.png)
 
 Примеры работы SVM с различным гиперпараметром С для линейно разделимой выборки:
@@ -1500,6 +1499,19 @@ Log_reg_clf <- function (z, feature_matrix, labels)  {
 <table>
     <tr>
         <td>
+        </td>
+        <td>
+            Линейное ядро
+        </td>
+        <td>
+            Нелинейное ядро
+        </td>
+    </tr>
+    <tr>
+        <td>
+            Линейно<br>разделимая<br>выборка
+        </td>
+        <td>
             <img src="SVM/lin_lin.png"/>
         </td>
         <td>
@@ -1507,6 +1519,9 @@ Log_reg_clf <- function (z, feature_matrix, labels)  {
         </td>
     </tr>
     <tr>
+        <td>
+            Линейно<br>неразделимая<br>выборка
+        </td>
         <td>
             <img src="SVM/nelin_nelin.png"/>
         </td>
