@@ -1530,3 +1530,60 @@ Log_reg_clf <- function (z, feature_matrix, labels)  {
         </td>
     </tr>
 </table>
+
+#### ROC-кривая. AUC.
+
+Так как свободный член в уравнении разделяющей гиперплоскости зависит от
+отношения потерь, то он может варьироваться, а от этого может меняться
+ошибка. ROC-кривая и показывает изменение ошибки для разных значений
+свободного параметра. А в роли общей характеристики качества классификации
+выступает AUC (площадь подграфика ROC-кривой), не зависящий от конъюктургного
+параметра свободной переменной.
+
+Эффективный алгоритм построения ROC-кривой:
+
+```R
+ROC <- function(d, w) {
+  len <- dim(d)[1]
+  FRP <- vector()
+  TRP <- vector()
+  l_min <- 0
+  l_plu <- 0
+  func <- matrix(0,0,2)
+  for (i in 1:len) {
+    if (d[i,3] == -1) l_min <- l_min + 1
+    if (d[i,3] == 1) l_plu <- l_plu + 1
+    #d[i] <- c(d[i,], as.double(w %*% as.double(d[i, 1:2])))
+    func <- rbind(func, c(i, as.double(w %*% as.double(d[i, 1:2]))))
+  }
+  d <- cbind(d, func[,2])
+  d <- d[order(d[,4], decreasing = TRUE),]
+
+  FRP[1] <- 0
+  TRP[1] <- 0
+  AUC <- 0
+
+  for (i in 1:len) {
+    if (d[i, 3] ==  -1) {
+      FRP[i + 1] <- FRP[i] + 1 / l_min
+      TRP[i + 1] <- TRP[i]
+      AUC <- AUC + TRP[i + 1] / l_min
+    } else {
+      FRP[i + 1] <- FRP[i]
+      TRP[i + 1] <- TRP[i] + 1 / l_plu
+    }
+  }
+
+  plot(c(0, 1), c(0, 1), type = "n", xlab = "FRP", ylab = "TRP", main = "ROC-кривая")
+  points(FRP, TRP, type = "l")
+  legend("bottomright", paste("AUC = ", AUC))
+  abline(1, 0)
+
+}
+```
+
+Пример работы алгоритма:
+
+![](SVM/ROC_lin.png)
+![](SVM/ROC_nelin1.png)
+![](SVM/ROC_nelin2.png)
