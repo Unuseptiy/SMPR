@@ -24,6 +24,7 @@
     3.2. [ADALINE](#ADALINE)<br>
     3.3 [Правило Хэаба](#Правило-Хэбба)<br>
     3.4 [Логистическая регрессия](#Логистическая-регрессия)<br>
+    3.5 [Метод опорных векторов](#Метод-опорных-векторов)<br>
 
 ## Метрические алгоритмы классификации
 Одной из областей применения машинного обучения является задача классификации:
@@ -1313,6 +1314,17 @@ ADALINE <- function(feature_matrix, labels) {
   return(weight)
 }
 ```
+
+Классификатор на основе ADALINE:
+
+```R
+ADALINE_clf <- function (z, feature_matrix, labels)  {
+  z <- c(z, 1)
+  weight <- ADALINE(feature_matrix, labels)
+  return(sign(as.double(weight %*% z)))
+}
+```
+
 Пример работы алгоритма ADALINE:
 <!--<img src="ADALINE/ADALINE_ex.png" width="700" height="500">-->
 ![](linear_clf/ADALINE_hyp_gb1.png)
@@ -1341,6 +1353,16 @@ Hebbs_rule <- function(feature_matrix, labels) {
 }
 ```
 
+Классификатор на основе правила Хэбба:
+
+```R
+Hebb_clf <- function (z, feature_matrix, labels)  {
+  z <- c(z, 1)
+  weight <- Hebbs_rule(feature_matrix, labels)
+  return(sign(as.double(weight %*% z)))
+}
+```
+
 Пример работы правила Хэба:
 ![](linear_clf/Hebb_hyp_gb.png)
 ![](linear_clf/Hebb_hyp_rg.png)
@@ -1365,6 +1387,16 @@ Hebbs_rule <- function(feature_matrix, labels) {
 Logistic_regression <- function(feature_matrix, labels) {
   weight <- SGD(feature_matrix, labels, L_logistic, , eps = 5)
   return(weight)
+}
+```
+
+Классификатор на основе логистической регрессии:
+
+```R
+Log_reg_clf <- function (z, feature_matrix, labels)  {
+  z <- c(z, 1)
+  weight <- Logistic_regression(feature_matrix, labels)
+  return(sign(as.double(weight %*% z)))
 }
 ```
 
@@ -1408,4 +1440,78 @@ Logistic_regression <- function(feature_matrix, labels) {
         </td>
     </tr>
     
+</table>
+
+### Метод опорных векторов
+
+[Оглавление](#Оглавление)
+
+Очень мощным методом является метод опорных векторов. 
+
+При нахождении разделяющей  гиперплоскости в линейно разделимой выборке
+ограничивается свобода выбора тем соображением, что зазор между двумя классами
+должен быть максимальным. Задача, таким образом, сводится к задаче
+квадратичного программирования:
+
+![](SVM/lin_razd.png)
+
+В случае линейно неразделимой выборки задача квадратичного программирования
+приводится к следующему виду:
+
+![](SVM/lin_nerazd.png)
+
+где ослабляются ограничения, и минимизируемый функционал штрафуется за величину
+ошибки. По сути мы позволяем алгоритму ошибаться, но следим, чтобы он ошибался
+несильно.
+
+Решая двойственную к этой задачу, мы находим все параметры классификатора:
+
+![](SVM/lagr_syst.png)
+
+и получаем классификатор:
+
+![](SVM/classi.png)
+
+Так же для использования SVM в случае линейно неразделимой выборки используют
+ядра - такие функции ![](SVM/D.png), которые представимы в виде
+![](SVM/usl.png) при ![](SVM/phi.png), где Н - пространство со
+скалярным произведением.
+
+Еще не придуманы оптимальные методы определения ядра для разных задач.
+
+Классификатор в этом случае принимает вид.
+
+![](SVM/classi_core.png)
+
+Примеры работы SVM с различным гиперпараметром С для линейно разделимой выборки:
+
+![](SVM/lin_C05.png)
+![](SVM/lin_C1.png)
+![](SVM/lin_C10.png)
+
+Примеры работы SVM с различным гиперпараметром С для линейно неразделимой выборки:
+
+![](SVM/nelin_C1.png)
+![](SVM/nelin_C10.png)
+![](SVM/nelin_C1000.png)
+
+Работа SVM на различных выборках с разным ядром:
+
+<table>
+    <tr>
+        <td>
+            <img src="SVM/lin_lin.png"/>
+        </td>
+        <td>
+            <img src="SVM/lin_nelin.png"/>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <img src="SVM/nelin_nelin.png"/>
+        </td>
+        <td>
+            <img src="SVM/nelin_lin.png"/>
+        </td>
+    </tr>
 </table>
